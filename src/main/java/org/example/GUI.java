@@ -24,6 +24,9 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import javafx.stage.Stage;
+import javafx.util.Pair;
+
+import java.util.Vector;
 
 public class GUI {
     public void initUI(Stage stage) {
@@ -70,5 +73,8 @@ public class GUI {
         stage.setTitle("Map Generator");
         stage.setScene(scene);
         stage.show();
+    }
+    private void visualisePoissonDisc(PoissonDisc disc) {
+
     }
 }
