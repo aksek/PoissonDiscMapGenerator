@@ -38,13 +38,15 @@ public class GUI {
         Random rand = new Random();
         Circle vertex;
         Timeline timeline = new Timeline();
+        KeyFrame delay, appearing;
         for (int i = 0; i < 10; i++) {
             vertex = new Circle(rand.nextDouble() * 300, rand.nextDouble() * 500, 10);
             vertex.setOpacity(0.0);
             System.out.println(vertex.getCenterX() + " " + vertex.getCenterY());
             display.getChildren().addAll(vertex);
-            timeline.getKeyFrames().add(new KeyFrame(Duration.millis(5000),
-                    new KeyValue (vertex.opacityProperty(), 1)));
+            delay = new KeyFrame(Duration.seconds(i), new KeyValue (vertex.opacityProperty(), 1.0));
+            appearing = new KeyFrame(Duration.seconds(1), new KeyValue (vertex.opacityProperty(), 0.0));
+            timeline.getKeyFrames().addAll(delay, appearing);
         }
         timeline.play();
 
