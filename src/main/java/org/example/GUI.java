@@ -26,31 +26,27 @@ import javafx.util.Duration;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.util.Random;
 import java.util.Vector;
 
 public class GUI {
     public void initUI(Stage stage) {
 
-        AnchorPane display = new AnchorPane();
+        Pane display = new Pane();
         display.setMinSize(400, 500);
 
-        var rect = new Rectangle(20, 20, 60, 60);
-        rect.setEffect(new Lighting());
-        rect.setFill(Color.CADETBLUE);
-
-        var tl = new Timeline();
-
-        tl.setCycleCount(2);
-        tl.setAutoReverse(true);
-
-        var kv = new KeyValue(rect.translateXProperty(), 200);
-        var kf = new KeyFrame(Duration.millis(2000), kv);
-        tl.getKeyFrames().addAll(kf);
-
-        tl.play();
-
-        display.getChildren().addAll(rect);
-
+        Random rand = new Random();
+        Circle vertex;
+        Timeline timeline = new Timeline();
+        for (int i = 0; i < 10; i++) {
+            vertex = new Circle(rand.nextDouble() * 300, rand.nextDouble() * 500, 10);
+            vertex.setOpacity(0.0);
+            System.out.println(vertex.getCenterX() + " " + vertex.getCenterY());
+            display.getChildren().addAll(vertex);
+            timeline.getKeyFrames().add(new KeyFrame(Duration.millis(5000),
+                    new KeyValue (vertex.opacityProperty(), 1)));
+        }
+        timeline.play();
 
         Text lblVertices = new Text("Vertices: ");
         Slider sldVertices = new Slider(1.0, 0.0, 100.0);
@@ -74,7 +70,11 @@ public class GUI {
         stage.setScene(scene);
         stage.show();
     }
-    private void visualisePoissonDisc(PoissonDisc disc) {
 
+    private void addVertex(Pane display, Random rand) {
+        var vertex = new Circle(rand.nextDouble() * 300, rand.nextDouble() * 500, 10);
+        System.out.println(vertex.getCenterX() + " " + vertex.getCenterY());
+        display.getChildren().addAll(vertex);
     }
+
 }
