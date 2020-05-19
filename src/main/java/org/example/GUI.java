@@ -5,6 +5,8 @@ import javafx.animation.KeyValue;
 import javafx.animation.ScaleTransition;
 import javafx.animation.Timeline;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
@@ -31,24 +33,10 @@ import java.util.Vector;
 
 public class GUI {
     public void initUI(Stage stage) {
+        Random rand = new Random();
 
         Pane display = new Pane();
         display.setMinSize(400, 500);
-
-        Random rand = new Random();
-        Circle vertex;
-        Timeline timeline = new Timeline();
-        KeyFrame delay, appearing;
-        for (int i = 0; i < 10; i++) {
-            vertex = new Circle(rand.nextDouble() * 300, rand.nextDouble() * 500, 10);
-            vertex.setOpacity(0.0);
-            System.out.println(vertex.getCenterX() + " " + vertex.getCenterY());
-            display.getChildren().addAll(vertex);
-            delay = new KeyFrame(Duration.seconds(i), new KeyValue (vertex.opacityProperty(), 0.0));
-            appearing = new KeyFrame(Duration.seconds(1), new KeyValue (vertex.opacityProperty(), 1.0));
-            timeline.getKeyFrames().addAll(delay, appearing);
-        }
-        timeline.play();
 
         Text lblVertices = new Text("Vertices: ");
         Slider sldVertices = new Slider(1.0, 0.0, 100.0);
@@ -71,6 +59,26 @@ public class GUI {
         stage.setTitle("Map Generator");
         stage.setScene(scene);
         stage.show();
+
+
+        Task<Void> sleeper = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {}
+                return null;
+            }
+        };
+        Thread wait = new Thread(sleeper);
+        sleeper.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                addVertex(display, rand);
+                wait.start();
+            }
+        });
+        wait.start();
     }
 
     private void addVertex(Pane display, Random rand) {
@@ -78,5 +86,7 @@ public class GUI {
         System.out.println(vertex.getCenterX() + " " + vertex.getCenterY());
         display.getChildren().addAll(vertex);
     }
+
+
 
 }
