@@ -6,21 +6,24 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.Vector;
 
 public class PoissonDisc {
-    int r, k;
+    int minR, k;
     int h, w;
     int gridH, gridW;
+    int cellSize;
 
     Vector<Point> inactiveSamples;
-    Vector<Point> grid;
     Vector<Point> activeSamples;
+    Point[][] grid;
 
-    PoissonDisc(int minR, int maxSampleNr, int height, int width) {
-        r = minR;
+    PoissonDisc(int minimumR, int maxSampleNr, int height, int width) {
+        minR = minimumR;
         k = maxSampleNr;
         h = height;
         w = width;
-        gridH = (int) Math.ceil((double) h / Math.sqrt(r));
-        gridW = (int) Math.ceil((double) w / Math.sqrt(r));
+        cellSize = (int) Math.sqrt(minR);
+        gridH = (int) Math.ceil((double) h / cellSize);
+        gridW = (int) Math.ceil((double) w / cellSize);
+        grid = new Point[gridH ][gridW];
         runAlgorithm();
     }
     private void runAlgorithm() {
@@ -29,18 +32,48 @@ public class PoissonDisc {
         Point current = new Point(x, y);
         activeSamples.addElement(current);
         while(!activeSamples.isEmpty()) {
-            int randomActiveSample = ThreadLocalRandom.current().nextInt(0, activeSamples.size());
-            current = activeSamples.get(randomActiveSample);
-            Point candidate = new Point(-1, -1);
-            for (int i = 0; i < k && !checkCandidate(candidate); i++) {
+            int currentIndex = ThreadLocalRandom.current().nextInt(0, activeSamples.size());
+            current = activeSamples.get(currentIndex);
+            Point candidate;
+            int i = 0;
+            Boolean validCandidate;
+            do {
                 candidate = getNextCandidate(current);
+                validCandidate = checkCandidate(candidate);
+                i++;
+            } while (i < k && !validCandidate);
+            if (validCandidate) {
+                activeSamples.addElement(candidate);
+            } else {
+                activeSamples.remove(currentIndex);
+                inactiveSamples.addElement(current);
             }
         }
     }
     private Point getNextCandidate(Point current) {
-        return new Point(1, 2);
+        double a = 2 * Math.PI * ThreadLocalRandom.current().nextDouble(0, 1);
+        int r = ThreadLocalRandom.current().nextInt(minR, 2 * minR);
+        int x = (int) current.x + (int)(r * Math.cos(a));
+        int y = (int) current.y + (int)(r * Math.sin(a));
+        return new Point(x, y);
     }
     private Boolean checkCandidate(Point candidate) {
+        if (0 > candidate.x || candidate.x >= w || 0 > candidate.y || candidate.y >= h)
+            return Boolean.FALSE;
+        int cellX = candidate.x / cellSize;
+        int cellY = candidate.y / cellSize;
+        int minCellX = Math.max(cellX - 2, 0);
+        int maxCellX = Math.max(cellX + 3, gridW);
+        int minCellY = Math.max(cellY - 2, 0);
+        int maxCellY = Math.max(cellY + 3, gridH);
+
+        for (int i = minCellX; i < maxCellX; i++) {
+            for (int j = minCellY; j < maxCellY; j++) {
+                if ((grid[j][i].x - candidate.x) * (grid[j][i].x - candidate.x) +
+                        (grid[j][i].y - candidate.y) * (grid[j][i].y - candidate.y) < minR)
+                    return false;
+            }
+        }
         return true;
     }
 

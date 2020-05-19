@@ -44,8 +44,8 @@ public class GUI {
             vertex.setOpacity(0.0);
             System.out.println(vertex.getCenterX() + " " + vertex.getCenterY());
             display.getChildren().addAll(vertex);
-            delay = new KeyFrame(Duration.seconds(i), new KeyValue (vertex.opacityProperty(), 1.0));
-            appearing = new KeyFrame(Duration.seconds(1), new KeyValue (vertex.opacityProperty(), 0.0));
+            delay = new KeyFrame(Duration.seconds(i), new KeyValue (vertex.opacityProperty(), 0.0));
+            appearing = new KeyFrame(Duration.seconds(1), new KeyValue (vertex.opacityProperty(), 1.0));
             timeline.getKeyFrames().addAll(delay, appearing);
         }
         timeline.play();
