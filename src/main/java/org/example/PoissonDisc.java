@@ -1,11 +1,20 @@
 package org.example;
 
-import java.awt.*;
-import java.util.concurrent.ThreadLocalRandom;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
+import javafx.scene.layout.Pane;
+import javafx.scene.shape.Circle;
 
+import java.awt.*;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+import javafx.scene.paint.Color;
 import java.util.Vector;
 
 public class PoissonDisc {
+    Pane display;
+
     int minR, k;
     int h, w;
     int gridH, gridW;
@@ -15,7 +24,8 @@ public class PoissonDisc {
     Vector<Point> activeSamples;
     Point[][] grid;
 
-    PoissonDisc(int minimumR, int maxSampleNr, int height, int width) {
+    PoissonDisc(int minimumR, int maxSampleNr, int height, int width, Pane disp) {
+        display = disp;
         minR = minimumR;
         k = maxSampleNr;
         h = height;
@@ -31,6 +41,7 @@ public class PoissonDisc {
         int y = ThreadLocalRandom.current().nextInt(0, h + 1);
         Point current = new Point(x, y);
         activeSamples.addElement(current);
+        addActiveVertex(display, current);
         while(!activeSamples.isEmpty()) {
             int currentIndex = ThreadLocalRandom.current().nextInt(0, activeSamples.size());
             current = activeSamples.get(currentIndex);
@@ -76,5 +87,37 @@ public class PoissonDisc {
         }
         return true;
     }
-
+    private void delayAddVertex(Pane display, Point current, int delay, boolean active) {
+        Task<Void> sleeper = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                try {
+                    Thread.sleep(200 * delay);
+                } catch (InterruptedException e) {
+                }
+                return null;
+            }
+        };
+        sleeper.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                if (active) {
+                    addActiveVertex(display, current);
+                } else {
+                    addInactiveVertex(display, current);
+                }
+            }
+        });
+    }
+    private void addActiveVertex(Pane display, Point current) {
+        var vertex = new Circle(current.x, current.y, 2);
+        vertex.setStroke(Color.RED);
+        System.out.println("active vertex: " + vertex.getCenterX() + " " + vertex.getCenterY());
+        display.getChildren().addAll(vertex);
+    }
+    private void addInactiveVertex(Pane display, Point current) {
+        var vertex = new Circle(current.x, current.y, 2);
+        System.out.println("inactive vertex: " + vertex.getCenterX() + " " + vertex.getCenterY());
+        display.getChildren().addAll(vertex);
+    }
 }

@@ -27,7 +27,6 @@ public class randomDistribution {
                 @Override
                 public void handle(WorkerStateEvent event) {
                     addRandomVertex(display, rand);
-                    new Thread(sleeper).start();
                 }
             });
             new Thread(sleeper).start();
