@@ -33,7 +33,6 @@ import java.util.Vector;
 
 public class GUI {
     public void initUI(Stage stage) {
-        Random rand = new Random();
 
         Pane display = new Pane();
         display.setMinSize(400, 500);
@@ -59,15 +58,18 @@ public class GUI {
         stage.setTitle("Map Generator");
         stage.setScene(scene);
         stage.show();
+        visualiseAlgorithm(display);
+    }
 
-
-        for (int i = 0; i < 10; i++){
+    private void visualiseAlgorithm(Pane display) {
+        Random rand = new Random();
+        for (int i = 0; i < 50; i++){
             int finalI = i;
             Task<Void> sleeper = new Task<Void>() {
                 @Override
                 protected Void call() throws Exception {
                     try {
-                        Thread.sleep(1000 * finalI);
+                        Thread.sleep(200 * finalI);
                     } catch (InterruptedException e) {
                     }
                     return null;
@@ -85,7 +87,7 @@ public class GUI {
     }
 
     private void addVertex(Pane display, Random rand) {
-        var vertex = new Circle(rand.nextDouble() * 300, rand.nextDouble() * 500, 10);
+        var vertex = new Circle(rand.nextDouble() * 300, rand.nextDouble() * 500, 2);
         System.out.println(vertex.getCenterX() + " " + vertex.getCenterY());
         display.getChildren().addAll(vertex);
     }
