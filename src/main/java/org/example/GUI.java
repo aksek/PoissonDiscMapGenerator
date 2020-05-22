@@ -1,35 +1,19 @@
 package org.example;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.ScaleTransition;
-import javafx.animation.Timeline;
-import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import javafx.scene.effect.Lighting;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import javafx.util.Duration;
 import javafx.stage.Stage;
-import javafx.util.Pair;
 
 import java.util.Random;
-import java.util.Vector;
 
 public class GUI {
     public void initUI(Stage stage) {
@@ -58,40 +42,6 @@ public class GUI {
         stage.setTitle("Map Generator");
         stage.setScene(scene);
         stage.show();
-        visualiseAlgorithm(display);
+        randomDistribution rand = new randomDistribution(display);
     }
-
-    private void visualiseAlgorithm(Pane display) {
-        Random rand = new Random();
-        for (int i = 0; i < 50; i++){
-            int finalI = i;
-            Task<Void> sleeper = new Task<Void>() {
-                @Override
-                protected Void call() throws Exception {
-                    try {
-                        Thread.sleep(200 * finalI);
-                    } catch (InterruptedException e) {
-                    }
-                    return null;
-                }
-            };
-            sleeper.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-                @Override
-                public void handle(WorkerStateEvent event) {
-                    addVertex(display, rand);
-                    new Thread(sleeper).start();
-                }
-            });
-            new Thread(sleeper).start();
-        }
-    }
-
-    private void addVertex(Pane display, Random rand) {
-        var vertex = new Circle(rand.nextDouble() * 300, rand.nextDouble() * 500, 2);
-        System.out.println(vertex.getCenterX() + " " + vertex.getCenterY());
-        display.getChildren().addAll(vertex);
-    }
-
-
-
 }
