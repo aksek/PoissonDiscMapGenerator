@@ -61,24 +61,27 @@ public class GUI {
         stage.show();
 
 
-        Task<Void> sleeper = new Task<Void>() {
-            @Override
-            protected Void call() throws Exception {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {}
-                return null;
-            }
-        };
-        Thread wait = new Thread(sleeper);
-        sleeper.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-            @Override
-            public void handle(WorkerStateEvent event) {
-                addVertex(display, rand);
-                wait.start();
-            }
-        });
-        wait.start();
+        for (int i = 0; i < 10; i++){
+            int finalI = i;
+            Task<Void> sleeper = new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                    try {
+                        Thread.sleep(1000 * finalI);
+                    } catch (InterruptedException e) {
+                    }
+                    return null;
+                }
+            };
+            sleeper.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+                @Override
+                public void handle(WorkerStateEvent event) {
+                    addVertex(display, rand);
+                    new Thread(sleeper).start();
+                }
+            });
+            new Thread(sleeper).start();
+        }
     }
 
     private void addVertex(Pane display, Random rand) {
