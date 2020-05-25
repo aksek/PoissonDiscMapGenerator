@@ -42,6 +42,7 @@ public class GUI {
         stage.setTitle("Map Generator");
         stage.setScene(scene);
         stage.show();
-        randomDistribution rand = new randomDistribution(display);
+//        randomDistribution rand = new randomDistribution(display);
+        PoissonDisc poisson = new PoissonDisc(100, 10, 500, 400, display);
     }
 }
