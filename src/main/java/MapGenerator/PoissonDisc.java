@@ -19,13 +19,15 @@ public class PoissonDisc {
     int h, w;
     int gridH, gridW;
     int cellSize;
+    int speed;
 
     Vector<Point> inactiveSamples;
     Vector<Point> activeSamples;
     Point[][] grid;
 
-    PoissonDisc(int minimumR, int maxSampleNr, int height, int width, Pane disp) {
+    PoissonDisc(int minimumR, int maxSampleNr, int simulationSpeed, int height, int width, Pane disp) {
         display = disp;
+        speed = simulationSpeed;
         minR = minimumR;
         k = maxSampleNr;
         h = height;
@@ -46,7 +48,7 @@ public class PoissonDisc {
         Point current = new Point(x, y);
         activeSamples.addElement(current);
         grid[current.y/cellSize][current.x/cellSize] = current;
-        delayDrawVertex(display, current, 0, true);
+        delayDrawVertex(display, current, 0, true, speed);
         int delay = 1;
         while(!activeSamples.isEmpty() && delay < 1000) {
             int currentIndex = ThreadLocalRandom.current().nextInt(0, activeSamples.size());
@@ -67,12 +69,12 @@ public class PoissonDisc {
                 activeSamples.addElement(candidate);
                 grid[candidate.y/cellSize][candidate.x/cellSize] = candidate;
 //                System.out.println("Added");
-                delayDrawVertex(display, current, delay, true);
+                delayDrawVertex(display, current, delay, true, speed);
             } else {
                 System.out.println("Invalid!");
                 activeSamples.remove(currentIndex);
                 inactiveSamples.addElement(current);
-                delayDrawVertex(display, current, delay, false);
+                delayDrawVertex(display, current, delay, false, speed);
 
             }
             delay++;
@@ -112,12 +114,12 @@ public class PoissonDisc {
         }
         return true;
     }
-    private void delayDrawVertex(Pane display, Point current, int delay, boolean active) {
+    private void delayDrawVertex(Pane display, Point current, int delay, boolean active, int speed) {
         Task<Void> sleeper = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
                 try {
-                    Thread.sleep(200 * delay);
+                    Thread.sleep(1000 / speed * delay);
                 } catch (InterruptedException e) {
                 }
                 return null;

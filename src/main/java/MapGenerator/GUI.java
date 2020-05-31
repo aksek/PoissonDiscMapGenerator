@@ -28,10 +28,10 @@ public class GUI {
         Spinner<Integer> spnMinDist = new Spinner<Integer>(1, 100, 1);
 
         Text lblMaxSampleNr = new Text("Max sample number: ");
-        Spinner spnMaxSampleNr = new Spinner(1, 1000, 10);
+        Spinner<Integer> spnMaxSampleNr = new Spinner<Integer>(1, 50, 1);
 
         Text lblSpeed = new Text("Simulation speed: ");
-        Spinner spnSpeed = new Spinner(1, 100, 1);
+        Spinner<Integer> spnSpeed = new Spinner<Integer>(1, 100, 1);
 
         final ToggleGroup mode = new ToggleGroup();
 
@@ -44,7 +44,7 @@ public class GUI {
 
         EventHandler<ActionEvent> btnStartPressed = new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
-                PoissonDisc poisson = new PoissonDisc(spnMinDist.getValue(), 10, 500, 400, display);
+                PoissonDisc poisson = new PoissonDisc(spnMinDist.getValue(), spnMaxSampleNr.getValue(), spnSpeed.getValue(), 500, 400, display);
             }
         };
         btnStart.setOnAction(btnStartPressed);
