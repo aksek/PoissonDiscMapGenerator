@@ -25,7 +25,10 @@ public class GUI {
         menu.setHgap(5);
 
         Text lblMinDist = new Text("Min distance: ");
-        Spinner spnMindDist = new Spinner(1, 100, 1);
+        Spinner<Integer> spnMinDist = new Spinner<Integer>(1, 100, 1);
+
+        Text lblMaxSampleNr = new Text("Max sample number: ");
+        Spinner spnMaxSampleNr = new Spinner(1, 1000, 10);
 
         Text lblSpeed = new Text("Simulation speed: ");
         Spinner spnSpeed = new Spinner(1, 100, 1);
@@ -41,13 +44,15 @@ public class GUI {
 
         EventHandler<ActionEvent> btnStartPressed = new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
-                PoissonDisc poisson = new PoissonDisc(100, 10, 500, 400, display);
+                PoissonDisc poisson = new PoissonDisc(spnMinDist.getValue(), 10, 500, 400, display);
             }
         };
         btnStart.setOnAction(btnStartPressed);
 
-        menu.add(lblMinDist, 0, 1);
-        menu.add(spnMindDist, 1, 1);
+        menu.add(lblMinDist, 0, 0);
+        menu.add(spnMinDist, 1, 0);
+        menu.add(lblMaxSampleNr, 0, 1);
+        menu.add(spnMaxSampleNr, 1, 1);
         menu.add(lblSpeed, 0, 2);
         menu.add(spnSpeed, 1, 2);
         menu.add(rbPoisson, 0, 3);
