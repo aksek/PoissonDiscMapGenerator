@@ -1,4 +1,4 @@
-package org.example;
+package MapGenerator;
 
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
@@ -136,7 +136,7 @@ public class PoissonDisc {
     }
     private void addActiveVertex(Pane display, Point current) {
         var vertex = new Circle(current.x, current.y, 2);
-        vertex.setStroke(Color.RED);
+        vertex.setFill(Color.RED);
 //        System.out.println("active vertex: " + vertex.getCenterX() + " " + vertex.getCenterY());
         display.getChildren().addAll(vertex);
     }
