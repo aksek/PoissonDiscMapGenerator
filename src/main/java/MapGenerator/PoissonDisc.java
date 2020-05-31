@@ -45,6 +45,7 @@ public class PoissonDisc {
         int y = ThreadLocalRandom.current().nextInt(0, h + 1);
         Point current = new Point(x, y);
         activeSamples.addElement(current);
+        grid[current.y/cellSize][current.x/cellSize] = current;
         delayDrawVertex(display, current, 0, true);
         int delay = 1;
         while(!activeSamples.isEmpty() && delay < 1000) {
