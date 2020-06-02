@@ -1,5 +1,7 @@
 # PoissonDiscMapGenerator
 
+Aktualnie program pozwala na wybranie parametrów algorytmu Bridsona i wizualizuje generację dysku Poissona zgodnie z algorytmem. 
+
 ## Installation
 
 ### Requirements:
