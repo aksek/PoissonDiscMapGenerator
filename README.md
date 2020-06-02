@@ -3,6 +3,7 @@
 ## Installation
 
 ### Requirements:
+- javafx
 - JDK 8 or later
 - Maven
 
