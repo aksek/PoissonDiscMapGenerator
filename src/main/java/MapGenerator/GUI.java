@@ -44,7 +44,7 @@ public class GUI {
 
         EventHandler<ActionEvent> btnStartPressed = new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
-                PoissonDisc poisson = new PoissonDisc(spnMinDist.getValue(), spnMaxSampleNr.getValue(), spnSpeed.getValue(), 500, 400, display);
+                PoissonDiscMain poisson = new PoissonDiscMain(spnMinDist.getValue(), spnMaxSampleNr.getValue(), spnSpeed.getValue(), 500, 400, display);
             }
         };
         btnStart.setOnAction(btnStartPressed);
