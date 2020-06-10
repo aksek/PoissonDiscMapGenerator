@@ -44,7 +44,11 @@ public class GUI {
 
         EventHandler<ActionEvent> btnStartPressed = new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
-                PoissonDiscMain poisson = new PoissonDiscMain(spnMinDist.getValue(), spnMaxSampleNr.getValue(), spnSpeed.getValue(), 500, 400, display);
+                if (rbPoisson.isSelected()) {
+                    PoissonDiscMain poisson = new PoissonDiscMain(spnMinDist.getValue(), spnMaxSampleNr.getValue(), spnSpeed.getValue(), 500, 400, display);
+                } else if (rbRandom.isSelected()) {
+                    randomDistribution rand = new randomDistribution(display, spnSpeed.getValue());
+                }
             }
         };
         btnStart.setOnAction(btnStartPressed);
@@ -64,12 +68,11 @@ public class GUI {
         root.add(display, 0, 0);
         root.add(menu, 1, 0);
 
-        Scene scene = new Scene(root, 640, 480);
+        Scene scene = new Scene(root, 760, 480);
         scene.setFill(Color.AZURE);
         stage.setTitle("Map Generator");
         stage.setScene(scene);
         stage.show();
-//        randomDistribution rand = new randomDistribution(display);
 
     }
 }
