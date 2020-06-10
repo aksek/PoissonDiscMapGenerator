@@ -1,12 +1,10 @@
-package MapGenerator;
+package org.example;
 
-import MapGenerator.PoissonDisc;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 class PoissonDiscTest {
 
@@ -20,7 +18,7 @@ class PoissonDiscTest {
         Assertions.assertEquals(false, tester.checkCandidate(new Point(19, 10)));
         Assertions.assertEquals(false, tester.checkCandidate(new Point(8, 10)));
         Assertions.assertEquals(false, tester.checkCandidate(new Point(8, 8)));
-        Assertions.assertEquals(true, tester.checkCandidate(new Point(14, 14)));
+        Assertions.assertEquals(true, tester.checkCandidate(new Point(21, 0)));
     }
 
     @Test

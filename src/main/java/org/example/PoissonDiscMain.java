@@ -1,4 +1,4 @@
-package MapGenerator;
+package org.example;
 
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
@@ -7,9 +7,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 
 import java.awt.*;
-import java.util.concurrent.ThreadLocalRandom;
+
 import javafx.scene.paint.Color;
-import java.util.Vector;
 
 public class PoissonDiscMain {
     PoissonDisc poisson;

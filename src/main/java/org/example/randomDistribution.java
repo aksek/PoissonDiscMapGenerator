@@ -1,4 +1,4 @@
-package MapGenerator;
+package org.example;
 
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;

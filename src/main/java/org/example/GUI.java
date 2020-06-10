@@ -1,4 +1,4 @@
-package MapGenerator;
+package org.example;
 
 import javafx.geometry.Insets;
 import javafx.scene.Scene;

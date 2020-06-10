@@ -1,6 +1,5 @@
-package MapGenerator;
+package org.example;
 
-import MapGenerator.GUI;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
