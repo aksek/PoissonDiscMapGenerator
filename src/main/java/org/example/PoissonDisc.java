@@ -1,4 +1,4 @@
-package MapGenerator;
+package org.example;
 
 import java.awt.*;
 import java.util.Vector;
