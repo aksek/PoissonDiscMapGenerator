@@ -9,7 +9,7 @@ import javafx.scene.shape.Circle;
 import java.util.Random;
 
 public class randomDistribution {
-    randomDistribution(Pane display) {
+    randomDistribution(Pane display, int speed) {
         Random rand = new Random();
         for (int i = 0; i < 50; i++){
             int finalI = i;
@@ -17,7 +17,7 @@ public class randomDistribution {
                 @Override
                 protected Void call() throws Exception {
                     try {
-                        Thread.sleep(200 * finalI);
+                        Thread.sleep(1000 / speed * finalI);
                     } catch (InterruptedException e) {
                     }
                     return null;
