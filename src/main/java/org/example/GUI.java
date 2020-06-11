@@ -25,13 +25,16 @@ public class GUI {
         menu.setHgap(5);
 
         Text lblMinDist = new Text("Min distance: ");
-        Spinner<Integer> spnMinDist = new Spinner<Integer>(1, 100, 1);
+        Spinner<Integer> spnMinDist = new Spinner<Integer>(1, 100, 20);
 
         Text lblMaxSampleNr = new Text("Max sample number: ");
-        Spinner<Integer> spnMaxSampleNr = new Spinner<Integer>(1, 50, 1);
+        Spinner<Integer> spnMaxSampleNr = new Spinner<Integer>(1, 50, 10);
 
         Text lblSpeed = new Text("Simulation speed: ");
-        Spinner<Integer> spnSpeed = new Spinner<Integer>(1, 100, 1);
+        Spinner<Integer> spnSpeed = new Spinner<Integer>(1, 100, 20);
+
+        Text lblMaxVertexNr = new Text("Maximum vertex number: ");
+        Spinner<Integer> spnMaxVertexNr = new Spinner<Integer>(1, 1000, 500);
 
         final ToggleGroup mode = new ToggleGroup();
 
@@ -45,13 +48,22 @@ public class GUI {
         EventHandler<ActionEvent> btnStartPressed = new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
                 if (rbPoisson.isSelected()) {
-                    PoissonDiscMain poisson = new PoissonDiscMain(spnMinDist.getValue(), spnMaxSampleNr.getValue(), spnSpeed.getValue(), 500, 400, display);
+                    PoissonDiscMain poisson = new PoissonDiscMain(spnMinDist.getValue(), spnMaxSampleNr.getValue(), spnMaxVertexNr.getValue(), spnSpeed.getValue(), 500, 400, display);
                 } else if (rbRandom.isSelected()) {
-                    randomDistribution rand = new randomDistribution(display, spnSpeed.getValue());
+                    randomDistribution rand = new randomDistribution(display, spnSpeed.getValue(), spnMaxVertexNr.getValue());
                 }
             }
         };
         btnStart.setOnAction(btnStartPressed);
+
+        Button btnClear = new Button("Clear");
+        EventHandler<ActionEvent> btnClearPressed = new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent e) {
+                display.getChildren().clear();
+            }
+        };
+        btnClear.setOnAction(btnClearPressed);
+
 
         menu.add(lblMinDist, 0, 0);
         menu.add(spnMinDist, 1, 0);
@@ -59,9 +71,12 @@ public class GUI {
         menu.add(spnMaxSampleNr, 1, 1);
         menu.add(lblSpeed, 0, 2);
         menu.add(spnSpeed, 1, 2);
-        menu.add(rbPoisson, 0, 3);
-        menu.add(rbRandom, 1, 3);
-        menu.add(btnStart, 1, 4);
+        menu.add(lblMaxVertexNr, 0, 3);
+        menu.add(spnMaxVertexNr, 1, 3);
+        menu.add(rbPoisson, 0, 4);
+        menu.add(rbRandom, 1, 4);
+        menu.add(btnStart, 0, 5);
+        menu.add(btnClear, 1, 5);
 
 
         GridPane root = new GridPane();
