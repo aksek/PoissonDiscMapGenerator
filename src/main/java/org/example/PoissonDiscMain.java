@@ -15,20 +15,23 @@ public class PoissonDiscMain {
     Pane display;
     int speed;
     int k;
+    int vertices;
 
-    PoissonDiscMain(int minimumR, int maxSampleNr, int simulationSpeed, int height, int width, Pane disp) {
+    PoissonDiscMain(int minimumR, int maxSampleNr, int maxVertexNumber, int simulationSpeed, int height, int width, Pane disp) {
         poisson = new PoissonDisc(minimumR, maxSampleNr, height, width);
         speed = simulationSpeed;
         display = disp;
         k = maxSampleNr;
+        vertices = maxVertexNumber;
         runAlgorithm();
     }
     private void runAlgorithm() {
         Point current = poisson.getFirstVertex();
         poisson.addVertex(current);
         delayDrawVertex(display, current, 0, true, speed);
+        int vertexCounter = 1;
         int delay = 1;
-        while(!poisson.finished() && delay < 1000) {
+        while(!poisson.finished() && vertexCounter < vertices) {
             int currentIndex = poisson.getRandomActiveVertexIndex();
             current = poisson.getVertexByIndex(currentIndex);
             Point candidate;
@@ -39,14 +42,16 @@ public class PoissonDiscMain {
                 validCandidate = poisson.checkCandidate(candidate);
                 i++;
             } while (i < k && !validCandidate);
+
             if (validCandidate) {
+                vertexCounter++;
                 poisson.addVertex(candidate);
                 delayDrawVertex(display, current, delay, true, speed);
             } else {
                 poisson.deactivate(currentIndex, current);
                 delayDrawVertex(display, current, delay, false, speed);
-
             }
+            System.out.println("vertexCounter: " + vertexCounter);
             delay++;
         }
     }
