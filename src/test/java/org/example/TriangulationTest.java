@@ -16,7 +16,7 @@ public class TriangulationTest {
         vertices.addElement(new Point(5, 1));
         vertices.addElement(new Point(1, 10));
         vertices.addElement(new Point(5, 10));
-        Triangulation tester = new Triangulation(Vector<Point> vertices);
+        Triangulation tester = new Triangulation(vertices);
         Tile superTriangle = tester.createSuperTriangle();
         for (Point vertex : vertices) {
             Assertions.assertTrue(onSameSideOfLine(vertex, superTriangle.A(), superTriangle.B(), superTriangle.C()));
@@ -33,8 +33,18 @@ public class TriangulationTest {
         else return false;
     }
     @Test
-    void getInvalidTriangles() {
+    void getCircumcenter() {
+        Vector<Point> vertices = new Vector<>();
+        Triangulation tester = new Triangulation(vertices);
+        Tile t = new Tile(new Point(1, 1), new Point(50, 20), new Point(30, 60));
+        Point circumcenter = tester.getCircumcenter(t);
+        System.out.println("circumcenter: " + circumcenter.x + " " + circumcenter.y);
 
+        Assertions.assertTrue((int)circumcenter.distance(t.A()) - (int)circumcenter.distance(t.B()) <= 1);
+        Assertions.assertTrue((int)circumcenter.distance(t.B()) - (int)circumcenter.distance(t.C()) <= 1);
+    }
+    @Test
+    void getInvalidTriangles() {
     }
     @Test
     void getPolygonVertices() {
