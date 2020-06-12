@@ -88,7 +88,6 @@ public class PoissonDiscMain {
     private void addInactiveVertex(Pane display, Point current) {
         var vertex = new Circle(current.x, current.y, 2);
         System.out.println("inactive vertex: " + vertex.getCenterX() + " " + vertex.getCenterY());
-        display.getChildren().removeAll(vertex);
         display.getChildren().addAll(vertex);
     }
 }

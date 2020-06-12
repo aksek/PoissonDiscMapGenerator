@@ -14,7 +14,7 @@ import java.awt.*;
 public class TriangulationMain {
     TriangulationMain(){}
     private void runAlgorithm() {}
-    private void delayDrawVertex(Pane display, Tile current, int delay, int speed) {
+    private void delayDrawTile(Pane display, Tile current, int delay, int speed) {
         Task<Void> sleeper = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
