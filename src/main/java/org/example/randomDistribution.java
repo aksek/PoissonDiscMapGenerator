@@ -1,8 +1,6 @@
 package org.example;
 
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
-import javafx.event.EventHandler;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 
@@ -17,22 +15,17 @@ public class randomDistribution {
         H = height;
         for (int i = 0; i < maxVertexNumber; i++){
             int finalI = i;
-            Task<Void> sleeper = new Task<Void>() {
+            Task<Void> sleeper = new Task<>() {
                 @Override
-                protected Void call() throws Exception {
+                protected Void call() {
                     try {
                         Thread.sleep(1000 / speed * finalI);
-                    } catch (InterruptedException e) {
+                    } catch (InterruptedException ignored) {
                     }
                     return null;
                 }
             };
-            sleeper.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-                @Override
-                public void handle(WorkerStateEvent event) {
-                    addRandomVertex(display);
-                }
-            });
+            sleeper.setOnSucceeded(event -> addRandomVertex(display));
             new Thread(sleeper).start();
         }
     }

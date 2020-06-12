@@ -3,9 +3,9 @@ package org.example;
 import java.awt.*;
 
 public class Tile {
-    private Point A;
-    private Point B;
-    private Point C;
+    private final Point A;
+    private final Point B;
+    private final Point C;
 
     public Tile(Point a, Point b, Point c) {
         A = a;

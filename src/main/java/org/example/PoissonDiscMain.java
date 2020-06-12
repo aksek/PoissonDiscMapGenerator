@@ -1,14 +1,11 @@
 package org.example;
 
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
-import javafx.event.EventHandler;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 import java.awt.*;
-
-import javafx.scene.paint.Color;
 
 public class PoissonDiscMain {
     PoissonDisc poisson;
@@ -36,7 +33,7 @@ public class PoissonDiscMain {
             current = poisson.getVertexByIndex(currentIndex);
             Point candidate;
             int i = 0;
-            boolean validCandidate = false;
+            boolean validCandidate;
             do {
                 candidate = poisson.getNextCandidate(current);
                 validCandidate = poisson.checkCandidate(candidate);
@@ -57,24 +54,21 @@ public class PoissonDiscMain {
     }
 
     private void delayDrawVertex(Pane display, Point current, int delay, boolean active, int speed) {
-        Task<Void> sleeper = new Task<Void>() {
+        Task<Void> sleeper = new Task<>() {
             @Override
-            protected Void call() throws Exception {
+            protected Void call() {
                 try {
                     Thread.sleep(1000 / speed * delay);
-                } catch (InterruptedException e) {
+                } catch (InterruptedException ignored) {
                 }
                 return null;
             }
         };
-        sleeper.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-            @Override
-            public void handle(WorkerStateEvent event) {
-                if (active) {
-                    addActiveVertex(display, current);
-                } else {
-                    addInactiveVertex(display, current);
-                }
+        sleeper.setOnSucceeded(event -> {
+            if (active) {
+                addActiveVertex(display, current);
+            } else {
+                addInactiveVertex(display, current);
             }
         });
         new Thread(sleeper).start();

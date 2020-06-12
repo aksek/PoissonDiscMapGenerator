@@ -36,16 +36,16 @@ public class GUI {
 //        menu.setBackground(new Background(new BackgroundFill(Color.LINEN, new CornerRadii(0), new Insets(0))));
 
         Text lblMinDist = new Text("Min distance: ");
-        Spinner<Integer> spnMinDist = new Spinner<Integer>(1, 100, 20);
+        Spinner<Integer> spnMinDist = new Spinner<>(1, 100, 20);
 
         Text lblMaxSampleNr = new Text("Max sample number: ");
-        Spinner<Integer> spnMaxSampleNr = new Spinner<Integer>(1, 50, 10);
+        Spinner<Integer> spnMaxSampleNr = new Spinner<>(1, 50, 10);
 
         Text lblSpeed = new Text("Simulation speed: ");
-        Spinner<Integer> spnSpeed = new Spinner<Integer>(1, 100, 20);
+        Spinner<Integer> spnSpeed = new Spinner<>(1, 100, 20);
 
         Text lblMaxVertexNr = new Text("Maximum vertex number: ");
-        Spinner<Integer> spnMaxVertexNr = new Spinner<Integer>(1, 1000, 500);
+        Spinner<Integer> spnMaxVertexNr = new Spinner<>(1, 1000, 500);
 
         final ToggleGroup mode = new ToggleGroup();
 
@@ -56,31 +56,21 @@ public class GUI {
 
         Button btnStart = new Button("Start!");
 
-        EventHandler<ActionEvent> btnStartPressed = new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent e) {
-                if (rbPoisson.isSelected()) {
-                    PoissonDiscMain poisson = new PoissonDiscMain(spnMinDist.getValue(), spnMaxSampleNr.getValue(), spnMaxVertexNr.getValue(), spnSpeed.getValue(), (int)display.getHeight(), (int)display.getWidth(), display);
-                } else if (rbRandom.isSelected()) {
-                    randomDistribution rand = new randomDistribution(display, spnSpeed.getValue(), spnMaxVertexNr.getValue(), (int)display.getHeight(), (int)display.getWidth());
-                }
+        EventHandler<ActionEvent> btnStartPressed = e -> {
+            if (rbPoisson.isSelected()) {
+                new PoissonDiscMain(spnMinDist.getValue(), spnMaxSampleNr.getValue(), spnMaxVertexNr.getValue(), spnSpeed.getValue(), (int) display.getHeight(), (int) display.getWidth(), display);
+            } else if (rbRandom.isSelected()) {
+                new randomDistribution(display, spnSpeed.getValue(), spnMaxVertexNr.getValue(), (int) display.getHeight(), (int) display.getWidth());
             }
         };
         btnStart.setOnAction(btnStartPressed);
 
         Button btnClear = new Button("Clear");
-        EventHandler<ActionEvent> btnClearPressed = new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent e) {
-                display.getChildren().clear();
-            }
-        };
+        EventHandler<ActionEvent> btnClearPressed = e -> display.getChildren().clear();
         btnClear.setOnAction(btnClearPressed);
 
         Button btnSave = new Button("Save");
-        EventHandler<ActionEvent> btnSavePressed = new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent e) {
-                display.captureAndSaveDisplay();
-            }
-        };
+        EventHandler<ActionEvent> btnSavePressed = e -> display.captureAndSaveDisplay();
         btnSave.setOnAction(btnSavePressed);
 
 
@@ -104,8 +94,8 @@ public class GUI {
         root.setPrefSize(display.getPrefWidth() + menu.getPrefWidth(), display.getPrefHeight());
 //        ColumnConstraints column0 = new ColumnConstraints(display.getPrefWidth(), display.getPrefHeight(), Double.MAX_VALUE);
 //        column0.setHgrow(Priority.ALWAYS);
-        root.setFillHeight(display, Boolean.TRUE);
-        root.setFillWidth(display, Boolean.TRUE);
+        GridPane.setFillHeight(display, Boolean.TRUE);
+        GridPane.setFillWidth(display, Boolean.TRUE);
 
 
         root.add(display, 0, 0);
