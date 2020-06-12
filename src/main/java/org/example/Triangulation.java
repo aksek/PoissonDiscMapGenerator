@@ -1,11 +1,13 @@
 package org.example;
 
+import javafx.scene.shape.Polygon;
+
 import java.awt.*;
 import java.util.Vector;
 
 public class Triangulation {
     int W, H;
-    public Triangulation(Vector<Point> vertices, int width, int height) {
+    public Triangulation(int width, int height) {
         W = width;
         H = height;
     }
@@ -32,5 +34,26 @@ public class Triangulation {
     }
     public int getRadius(Tile t, Point circumcenter) {
         return (int)circumcenter.distance(t.A());
+    }
+
+    public void add(Tile superTriangle) {
+    }
+
+    public void add(Point vertex) {
+    }
+
+    public Vector<Tile> getInvalidTriangles() {
+    }
+
+    public Polygon getEmptyPolygonEdges() {
+    }
+
+    public void remove(Vector<Tile> invalidTriangles) {
+    }
+
+    public void fill(Polygon hole, Point vertex) {
+    }
+
+    public void removeFakeTriangles() {
     }
 }

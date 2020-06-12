@@ -10,10 +10,28 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.TriangleMesh;
 
 import java.awt.*;
+import java.util.Vector;
 
 public class TriangulationMain {
-    TriangulationMain(){}
-    private void runAlgorithm() {}
+    int W, H;
+    Vector<Point> V;
+    TriangulationMain(Vector<Point> vertices){
+        V = vertices;
+    }
+    private void runAlgorithm() {
+        Triangulation triangulation = new Triangulation(W, H);
+        triangulation.add(triangulation.createSuperTriangle());
+        Vector<Tile> invalidTriangles = new Vector<>();
+        Polygon hole = new Polygon();
+        for (Point vertex : V) {
+            triangulation.add(vertex);
+            invalidTriangles = triangulation.getInvalidTriangles();
+            hole = triangulation.getEmptyPolygonEdges();
+            triangulation.remove(invalidTriangles);
+            triangulation.fill(hole, vertex);
+        }
+        triangulation.removeFakeTriangles();
+    }
     private void delayDrawTile(Pane display, Tile current, int delay, int speed) {
         Task<Void> sleeper = new Task<Void>() {
             @Override

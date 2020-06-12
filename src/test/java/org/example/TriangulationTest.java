@@ -14,7 +14,7 @@ public class TriangulationTest {
         vertices.addElement(new Point(5, 1));
         vertices.addElement(new Point(1, 10));
         vertices.addElement(new Point(5, 10));
-        Triangulation tester = new Triangulation(vertices, 5, 10);
+        Triangulation tester = new Triangulation(5, 10);
         Tile superTriangle = tester.createSuperTriangle();
         for (Point vertex : vertices) {
             Assertions.assertTrue(onSameSideOfLine(vertex, superTriangle.A(), superTriangle.B(), superTriangle.C()));
@@ -32,7 +32,7 @@ public class TriangulationTest {
     @Test
     void getCircumcenter() {
         Vector<Point> vertices = new Vector<>();
-        Triangulation tester = new Triangulation(vertices, 50, 60);
+        Triangulation tester = new Triangulation(50, 60);
         Tile t = new Tile(new Point(1, 1), new Point(50, 20), new Point(30, 60));
         Point circumcenter = tester.getCircumcenter(t);
         System.out.println("circumcenter: " + circumcenter.x + " " + circumcenter.y);
