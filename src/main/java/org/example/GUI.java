@@ -14,7 +14,7 @@ import javafx.event.ActionEvent;
 public class GUI {
     public void initUI(Stage stage) {
 
-        Pane display = new Pane();
+        Display display = new Display();
         display.setMinSize(400, 500);
 
 
@@ -64,6 +64,14 @@ public class GUI {
         };
         btnClear.setOnAction(btnClearPressed);
 
+        Button btnSave = new Button("Save");
+        EventHandler<ActionEvent> btnSavePressed = new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent e) {
+                display.captureAndSaveDisplay();
+            }
+        };
+        btnSave.setOnAction(btnSavePressed);
+
 
         menu.add(lblMinDist, 0, 0);
         menu.add(spnMinDist, 1, 0);
@@ -77,6 +85,7 @@ public class GUI {
         menu.add(rbRandom, 1, 4);
         menu.add(btnStart, 0, 5);
         menu.add(btnClear, 1, 5);
+        menu.add(btnSave, 1, 6);
 
 
         GridPane root = new GridPane();
