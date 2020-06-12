@@ -9,8 +9,12 @@ import javafx.scene.shape.Circle;
 import java.util.Random;
 
 public class randomDistribution {
-    randomDistribution(Pane display, int speed, int maxVertexNumber) {
-        Random rand = new Random();
+    int W, H;
+    Random rand;
+    randomDistribution(Pane display, int speed, int maxVertexNumber, int height, int width) {
+        rand = new Random();
+        W = width;
+        H = height;
         for (int i = 0; i < maxVertexNumber; i++){
             int finalI = i;
             Task<Void> sleeper = new Task<Void>() {
@@ -26,15 +30,15 @@ public class randomDistribution {
             sleeper.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
                 @Override
                 public void handle(WorkerStateEvent event) {
-                    addRandomVertex(display, rand);
+                    addRandomVertex(display);
                 }
             });
             new Thread(sleeper).start();
         }
     }
 
-    private void addRandomVertex(Pane display, Random rand) {
-        var vertex = new Circle(rand.nextDouble() * 400, rand.nextDouble() * 500, 2);
+    private void addRandomVertex(Pane display) {
+        var vertex = new Circle(rand.nextDouble() * W, rand.nextDouble() * H, 2);
         System.out.println(vertex.getCenterX() + " " + vertex.getCenterY());
         display.getChildren().addAll(vertex);
     }
