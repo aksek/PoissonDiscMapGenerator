@@ -54,8 +54,8 @@ public class PoissonDisc {
     public Point getNextCandidate(Point current) {
         double a = 2 * Math.PI * ThreadLocalRandom.current().nextDouble(0, 1);
         int r = ThreadLocalRandom.current().nextInt(minR, 2 * minR);
-        int x = (int) current.x + (int)(r * Math.cos(a));
-        int y = (int) current.y + (int)(r * Math.sin(a));
+        int x = current.x + (int)Math.ceil(r * Math.cos(a));
+        int y = current.y + (int)Math.ceil(r * Math.sin(a));
         return new Point(x, y);
     }
     public boolean checkCandidate(Point candidate) {

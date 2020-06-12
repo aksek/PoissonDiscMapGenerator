@@ -27,7 +27,7 @@ class PoissonDiscTest {
         Point current = new Point(10, 10);
         tester.addVertex(current);
         Point candidate = tester.getNextCandidate(current);
-        Assertions.assertTrue(Math.pow(candidate.x - 10, 2) + Math.pow(candidate.y - 10, 2) >= 100);
-        Assertions.assertTrue(Math.pow(candidate.x - 10, 2) + Math.pow(candidate.y - 10, 2) <= 400);
+        Assertions.assertTrue(candidate.distance(current) >= 10);
+        Assertions.assertTrue(candidate.distance(current) <= 20);
     }
 }

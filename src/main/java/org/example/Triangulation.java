@@ -4,11 +4,13 @@ import java.awt.*;
 import java.util.Vector;
 
 public class Triangulation {
-    public Triangulation(Vector<Point> vertices) {
-
+    int W, H;
+    public Triangulation(Vector<Point> vertices, int width, int height) {
+        W = width;
+        H = height;
     }
     public Tile createSuperTriangle() {
-        return new Tile(new Point(1, 1), new Point(2, 1), new Point(1, 2));
+        return new Tile(new Point(-W / 2 - 2, -2), new Point(W * 3 / 2 + 2, -2), new Point(W / 2 , 2 * H + 1));
     }
     public Point getCircumcenter(Tile t) {
         int D = 2 * (t.Xa() * (t.Yb() - t.Yc())
