@@ -7,6 +7,8 @@ import java.util.Vector;
 
 public class Triangulation {
     int W, H;
+    Vector<Tile> triangles;
+    Vector<Node> graph;
     public Triangulation(int width, int height) {
         W = width;
         H = height;
@@ -36,7 +38,8 @@ public class Triangulation {
         return (int)circumcenter.distance(t.A());
     }
 
-    public void add(Tile superTriangle) {
+    public void add(Tile triangle) {
+
     }
 
     public void add(Point vertex) {
@@ -51,9 +54,9 @@ public class Triangulation {
     public void remove(Vector<Tile> invalidTriangles) {
     }
 
-    public void fill(Polygon hole, Point vertex) {
+    public Vector<Tile> fill(Polygon hole, Point vertex) {
     }
 
-    public void removeFakeTriangles() {
+    public Vector<Tile> getFakeTriangles() {
     }
 }

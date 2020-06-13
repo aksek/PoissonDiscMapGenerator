@@ -14,31 +14,50 @@ import java.util.Vector;
 
 public class TriangulationMain {
     int W, H;
+    int speed;
     Vector<Point> V;
-    TriangulationMain(Vector<Point> vertices){
+    Pane display;
+    TriangulationMain(Vector<Point> vertices, int width, int height, int simulationSpeed, Pane disp){
         V = vertices;
+        W = width;
+        H = height;
+        speed = simulationSpeed;
+        display = disp;
+        runAlgorithm();
     }
     private void runAlgorithm() {
         Triangulation triangulation = new Triangulation(W, H);
         triangulation.add(triangulation.createSuperTriangle());
-        Vector<Tile> invalidTriangles = new Vector<>();
-        Polygon hole = new Polygon();
+        Vector<Tile> invalidTriangles, newTriangles;
+        Polygon hole;
+        int delay = 0;
         for (Point vertex : V) {
             triangulation.add(vertex);
             invalidTriangles = triangulation.getInvalidTriangles();
             hole = triangulation.getEmptyPolygonEdges();
+            for (Tile current : invalidTriangles) {
+                delayUndrawTile(current, delay);
+            }
             triangulation.remove(invalidTriangles);
-            triangulation.fill(hole, vertex);
+            delay++;
+            newTriangles = triangulation.fill(hole, vertex);
+            for (Tile current : newTriangles) {
+                delayDrawTile(current, delay);
+            }
+            delay++;
         }
-        triangulation.removeFakeTriangles();
+        Vector<Tile> fakeTriangles = triangulation.getFakeTriangles();
+        for (Tile current : fakeTriangles) {
+            delayUndrawTile(current, delay);
+        }
     }
-    private void delayDrawTile(Pane display, Tile current, int delay, int speed) {
+    private void delayDrawTile(Tile current, int delay) {
         Task<Void> sleeper = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
                 try {
                     Thread.sleep(1000 / speed * delay);
-                } catch (InterruptedException e) {
+                } catch (InterruptedException ignored) {
                 }
                 return null;
             }
@@ -47,6 +66,25 @@ public class TriangulationMain {
             @Override
             public void handle(WorkerStateEvent event) {
                 display.getChildren().addAll(current.getRepresentation());
+            }
+        });
+        new Thread(sleeper).start();
+    }
+    private void delayUndrawTile(Tile current, int delay) {
+        Task<Void> sleeper = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                try {
+                    Thread.sleep(1000 / speed * delay);
+                } catch (InterruptedException ignored) {
+                }
+                return null;
+            }
+        };
+        sleeper.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                display.getChildren().removeAll(current.getRepresentation());
             }
         });
         new Thread(sleeper).start();
