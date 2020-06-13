@@ -46,12 +46,7 @@ public class TriangulationMain {
         sleeper.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
             @Override
             public void handle(WorkerStateEvent event) {
-                var tile = new Polygon();
-                tile.getPoints().addAll(
-                        (double)current.Xa(), (double)current.Ya(),
-                        (double)current.Xb(), (double)current.Yb(),
-                        (double)current.Xc(), (double)current.Yc());
-                display.getChildren().addAll(tile);
+                display.getChildren().addAll(current.getRepresentation());
             }
         });
         new Thread(sleeper).start();
