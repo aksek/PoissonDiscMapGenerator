@@ -16,11 +16,24 @@ public class Tile {
         A = new Node(a);
         B = new Node(b);
         C = new Node(c);
+        createRepresentation();
+        circumcenter = calcCircumcenter();
+    }
+    public Tile(Node a, Node b, Node c) {
+        A = a;
+        B = b;
+        C = c;
+        createRepresentation();
+        circumcenter = calcCircumcenter();
+    }
+    private void createRepresentation() {
         triangle.getPoints().addAll(
                 (double)A.getPoint().x, (double)A.getPoint().y,
                 (double)B.getPoint().x, (double)B.getPoint().y,
                 (double)C.getPoint().x, (double)C.getPoint().y);
-        circumcenter = calcCircumcenter();
+    }
+    public boolean has(Node vertex) {
+        return A == vertex || B == vertex || C == vertex;
     }
     public int Xa() { return A.getPoint().x; }
     public int Ya() { return A.getPoint().y; }

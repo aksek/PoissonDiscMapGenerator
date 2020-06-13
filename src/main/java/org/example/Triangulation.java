@@ -45,19 +45,54 @@ public class Triangulation {
         }
         return invalidTriangles;
     }
-
-    public Polygon getEmptyPolygonEdges() {
-        return new Polygon();
+    public Vector<Node> getCavityEdges(Vector<Tile> invalidTriangles) {
+        Vector<Node> cavity = new Vector<>();
+        for (Tile triangle : invalidTriangles) {
+            if (cavity.lastElement() != triangle.A())
+                cavity.addElement(triangle.A());
+            if (cavity.lastElement() != triangle.B())
+            cavity.addElement(triangle.B());
+            if (cavity.lastElement() != triangle.C())
+            cavity.addElement(triangle.C());
+        }
+        return cavity;
     }
-
     public void remove(Vector<Tile> invalidTriangles) {
+        int indInvalidTriangles = 0;
+        for (int indTriangles = 0; indTriangles < triangles.size();) {
+            if (triangles.get(indTriangles) == invalidTriangles.get(indInvalidTriangles)) {
+                triangles.removeElement(indTriangles);
+                indInvalidTriangles++;
+            } else {
+                indTriangles++;
+            }
+        }
     }
-
-    public Vector<Tile> fill(Polygon hole, Point vertex) {
-        return new Vector<Tile>();
+    public Vector<Tile> fill(Vector<Node> cavity) {
+        Vector<Tile> newTiles = new Vector<>();
+        Node newVertex = graph.lastElement();
+        Node A, B;
+        for(int i = 0; i < cavity.size(); i++) {
+            A = cavity.get(i);
+            B = cavity.get(i + 1);
+            this.add(new Tile(A, B, newVertex));
+        }
+        return newTiles;
     }
-
     public Vector<Tile> getFakeTriangles() {
-        return new Vector<Tile>();
+        Vector<Node> superTriangleNodes = new Vector<>();
+        superTriangleNodes.addElement(graph.get(0));
+        superTriangleNodes.addElement(graph.get(1));
+        superTriangleNodes.addElement(graph.get(2));
+        Vector<Tile> fakeTriangles = new Vector<>();
+        for (Tile triangle : triangles) {
+            for (Node vertex : superTriangleNodes) {
+                if (triangle.has(vertex)) {
+                    triangles.removeElement(triangle);
+                    fakeTriangles.addElement(triangle);
+                }
+            }
+        }
+        return fakeTriangles;
     }
 }
