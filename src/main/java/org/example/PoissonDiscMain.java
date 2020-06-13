@@ -12,14 +12,17 @@ public class PoissonDiscMain {
     Pane display;
     int speed;
     int k;
-    int vertices;
+    int maxVertices;
+    int W, H;
 
     PoissonDiscMain(int minimumR, int maxSampleNr, int maxVertexNumber, int simulationSpeed, int height, int width, Pane disp) {
         poisson = new PoissonDisc(minimumR, maxSampleNr, height, width);
         speed = simulationSpeed;
         display = disp;
         k = maxSampleNr;
-        vertices = maxVertexNumber;
+        maxVertices = maxVertexNumber;
+        W = width;
+        H = height;
         runAlgorithm();
     }
     private void runAlgorithm() {
@@ -28,7 +31,7 @@ public class PoissonDiscMain {
         delayDrawVertex(display, current, 0, true, speed);
         int vertexCounter = 1;
         int delay = 1;
-        while(!poisson.finished() && vertexCounter < vertices) {
+        while(!poisson.finished() && vertexCounter < maxVertices) {
             int currentIndex = poisson.getRandomActiveVertexIndex();
             current = poisson.getVertexByIndex(currentIndex);
             Point candidate;
@@ -51,6 +54,7 @@ public class PoissonDiscMain {
             System.out.println("vertexCounter: " + vertexCounter);
             delay++;
         }
+        wakeTriangulation(delay);
     }
 
     private void delayDrawVertex(Pane display, Point current, int delay, boolean active, int speed) {
@@ -83,6 +87,22 @@ public class PoissonDiscMain {
         var vertex = new Circle(current.x, current.y, 2);
         System.out.println("inactive vertex: " + vertex.getCenterX() + " " + vertex.getCenterY());
         display.getChildren().addAll(vertex);
+    }
+    private void wakeTriangulation(int delay) {
+        Task<Void> sleeper = new Task<>() {
+            @Override
+            protected Void call() {
+                try {
+                    Thread.sleep(1000 / speed * delay);
+                } catch (InterruptedException ignored) {
+                }
+                return null;
+            }
+        };
+        sleeper.setOnSucceeded(event -> {
+            new TriangulationMain(poisson.getGeneratedVertices(), W, H, speed, display, delay);
+        });
+        new Thread(sleeper).start();
     }
 }
 

@@ -36,13 +36,13 @@ public class GUI {
 //        menu.setBackground(new Background(new BackgroundFill(Color.LINEN, new CornerRadii(0), new Insets(0))));
 
         Text lblMinDist = new Text("Min distance: ");
-        Spinner<Integer> spnMinDist = new Spinner<>(1, 100, 20);
+        Spinner<Integer> spnMinDist = new Spinner<>(1, 100, 50);
 
         Text lblMaxSampleNr = new Text("Max sample number: ");
         Spinner<Integer> spnMaxSampleNr = new Spinner<>(1, 50, 10);
 
         Text lblSpeed = new Text("Simulation speed: ");
-        Spinner<Integer> spnSpeed = new Spinner<>(1, 100, 20);
+        Spinner<Integer> spnSpeed = new Spinner<>(1, 100, 50);
 
         Text lblMaxVertexNr = new Text("Maximum vertex number: ");
         Spinner<Integer> spnMaxVertexNr = new Spinner<>(1, 1000, 500);
@@ -51,6 +51,7 @@ public class GUI {
 
         RadioButton rbPoisson = new RadioButton("Poisson distribution");
         rbPoisson.setToggleGroup(mode);
+        rbPoisson.setSelected(true);
         RadioButton rbRandom = new RadioButton("Random distribution");
         rbRandom.setToggleGroup(mode);
 

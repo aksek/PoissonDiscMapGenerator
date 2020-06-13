@@ -10,7 +10,7 @@ public class Tile {
 
     private final Point circumcenter;
 
-    private Polygon triangle;
+    private Polygon representation;
 
     public Tile(Point a, Point b, Point c) {
         A = new Node(a);
@@ -27,7 +27,8 @@ public class Tile {
         circumcenter = calcCircumcenter();
     }
     private void createRepresentation() {
-        triangle.getPoints().addAll(
+        representation = new Polygon();
+        representation.getPoints().addAll(
                 (double)A.getPoint().x, (double)A.getPoint().y,
                 (double)B.getPoint().x, (double)B.getPoint().y,
                 (double)C.getPoint().x, (double)C.getPoint().y);
@@ -47,7 +48,7 @@ public class Tile {
     public Node C() { return C; }
 
     public Polygon getRepresentation() {
-        return triangle;
+        return representation;
     }
     public boolean contains(Point vertex) {
         boolean underAB = onSameSideOfLine(vertex, C.getPoint(), A.getPoint(), B.getPoint());

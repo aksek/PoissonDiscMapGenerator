@@ -28,7 +28,7 @@ public class PoissonDisc {
         grid = new Point[h][w];
     }
     public void deactivate(int index, Point vertex) {
-        activeSamples.remove(index);
+        activeSamples.removeElementAt(index);
         inactiveSamples.addElement(vertex);
     }
     public Point getVertexByIndex(int index) {
@@ -84,5 +84,8 @@ public class PoissonDisc {
             }
         }
         return true;
+    }
+    public Vector<Point> getGeneratedVertices() {
+        return inactiveSamples;
     }
 }
