@@ -17,18 +17,10 @@ public class TriangulationTest {
         Triangulation tester = new Triangulation(5, 10);
         Tile superTriangle = tester.createSuperTriangle();
         for (Point vertex : vertices) {
-            Assertions.assertTrue(onSameSideOfLine(vertex, superTriangle.A(), superTriangle.B(), superTriangle.C()));
-            Assertions.assertTrue(onSameSideOfLine(vertex, superTriangle.B(), superTriangle.C(), superTriangle.A()));
-            Assertions.assertTrue(onSameSideOfLine(vertex, superTriangle.C(), superTriangle.A(), superTriangle.B()));
+            Assertions.assertTrue(superTriangle.contains(vertex));
         }
+    }
 
-    }
-    boolean onSameSideOfLine(Point p1, Point p2, Point lineThrough1, Point lineThrough2) {
-        double a = (double)(lineThrough2.y - lineThrough1.y)/(lineThrough2.x - lineThrough1.x);
-        double b = lineThrough1.y - a * lineThrough1.x;
-        return (p1.y <= a * p1.x + b) && (p2.y <= a * p2.x + b) ||
-                (p1.y >= a * p1.x + b) && (p2.y >= a * p2.x + b);
-    }
     @Test
     void getCircumcenter() {
         Vector<Point> vertices = new Vector<>();
@@ -37,7 +29,7 @@ public class TriangulationTest {
         Point circumcenter = tester.getCircumcenter(t);
         System.out.println("circumcenter: " + circumcenter.x + " " + circumcenter.y);
 
-        Assertions.assertTrue((int)circumcenter.distance(t.A()) - (int)circumcenter.distance(t.B()) <= 1);
-        Assertions.assertTrue((int)circumcenter.distance(t.B()) - (int)circumcenter.distance(t.C()) <= 1);
+        Assertions.assertTrue((int)circumcenter.distance(t.A().getPoint()) - (int)circumcenter.distance(t.B().getPoint()) <= 1);
+        Assertions.assertTrue((int)circumcenter.distance(t.B().getPoint()) - (int)circumcenter.distance(t.C().getPoint()) <= 1);
     }
 }

@@ -16,47 +16,48 @@ public class Triangulation {
     public Tile createSuperTriangle() {
         return new Tile(new Point(-W / 2 - 2, -2), new Point(W * 3 / 2 + 2, -2), new Point(W / 2 , 2 * H + 1));
     }
-    public Point getCircumcenter(Tile t) {
-        int D = 2 * (t.Xa() * (t.Yb() - t.Yc())
-                   + t.Xb() * (t.Yc() - t.Ya())
-                   + t.Xc() * (t.Ya() - t.Yb()));
-        int Ux = (int)(((Math.pow(t.Xa(), 2) + Math.pow(t.Ya(), 2)) * (t.Yb() - t.Yc())
-                      + (Math.pow(t.Xb(), 2) + Math.pow(t.Yb(), 2)) * (t.Yc() - t.Ya())
-                      + (Math.pow(t.Xc(), 2) + Math.pow(t.Yc(), 2)) * (t.Ya() - t.Yb()))
-                       / D);
-        int Uy = (int)(((Math.pow(t.Xa(), 2) + Math.pow(t.Ya(), 2)) * (t.Xc() - t.Xb())
-                      + (Math.pow(t.Xb(), 2) + Math.pow(t.Yb(), 2)) * (t.Xa() - t.Xc())
-                      + (Math.pow(t.Xc(), 2) + Math.pow(t.Yc(), 2)) * (t.Xb() - t.Xa()))
-                       / D);
-        return new Point(Ux, Uy);
-    }
-    public int getRadius(Tile t) {
-        Point circumcenter = getCircumcenter(t);
-        return getRadius(t, circumcenter);
-    }
-    public int getRadius(Tile t, Point circumcenter) {
-        return (int)circumcenter.distance(t.A());
-    }
+
 
     public void add(Tile triangle) {
+        triangles.addElement(triangle);
+        int indA = graph.indexOf(triangle.A());
+        if (indA == -1) graph.addElement(triangle.A());
+        int indB = graph.indexOf(triangle.B());
+        if (indB == -1) graph.addElement(triangle.B());
+        int indC = graph.indexOf(triangle.C());
+        if (indC == -1) graph.addElement(triangle.C());
 
+        graph.get(indA).include(triangle);
+        graph.get(indB).include(triangle);
+        graph.get(indC).include(triangle);
     }
 
     public void add(Point vertex) {
+        graph.addElement(new Node(vertex));
     }
 
-    public Vector<Tile> getInvalidTriangles() {
+    public Vector<Tile> getInvalidTriangles(Point vertex) {
+        Vector<Tile> invalidTriangles = new Vector<>();
+        for(Tile triangle : triangles) {
+            if (triangle.circumcircleContains(vertex)) {
+                invalidTriangles.addElement(triangle);
+            }
+        }
+        return invalidTriangles;
     }
 
     public Polygon getEmptyPolygonEdges() {
+        return new Polygon();
     }
 
     public void remove(Vector<Tile> invalidTriangles) {
     }
 
     public Vector<Tile> fill(Polygon hole, Point vertex) {
+        return new Vector<Tile>();
     }
 
     public Vector<Tile> getFakeTriangles() {
+        return new Vector<Tile>();
     }
 }

@@ -5,13 +5,16 @@ import java.util.Vector;
 
 public class Node {
     private Point vertex;
-    private Vector<Point> connections;
+    private Vector<Tile> partOf;
 
     Node(Point point) {
         vertex = point;
+        partOf = new Vector<>();
     }
-
-    void connect(Point other) {
-        connections.addElement(other);
+    Point getPoint() {
+        return vertex;
+    }
+    void include(Tile triangle) {
+        partOf.addElement(triangle);
     }
 }

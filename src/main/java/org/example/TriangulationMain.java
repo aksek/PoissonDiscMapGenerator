@@ -29,18 +29,18 @@ public class TriangulationMain {
         Triangulation triangulation = new Triangulation(W, H);
         triangulation.add(triangulation.createSuperTriangle());
         Vector<Tile> invalidTriangles, newTriangles;
-        Polygon hole;
+        Polygon cavity;
         int delay = 0;
         for (Point vertex : V) {
             triangulation.add(vertex);
-            invalidTriangles = triangulation.getInvalidTriangles();
-            hole = triangulation.getEmptyPolygonEdges();
+            invalidTriangles = triangulation.getInvalidTriangles(vertex);
+            cavity = triangulation.getEmptyPolygonEdges();
             for (Tile current : invalidTriangles) {
                 delayUndrawTile(current, delay);
             }
             triangulation.remove(invalidTriangles);
             delay++;
-            newTriangles = triangulation.fill(hole, vertex);
+            newTriangles = triangulation.fill(cavity, vertex);
             for (Tile current : newTriangles) {
                 delayDrawTile(current, delay);
             }
