@@ -30,16 +30,31 @@ public class TriangulationMain {
             System.out.println("Adding vertex: " + vertex.x + " " + vertex.y);
             triangulation.add(vertex);
             invalidTriangles = triangulation.getInvalidTriangles(vertex);
+            System.out.println("Invalid: " + invalidTriangles.firstElement().getCircumcenter());
             cavity = triangulation.getCavityEdges(invalidTriangles);
-            delayUndrawTiles(invalidTriangles, delay);
+//            delayUndrawTiles(invalidTriangles, delay);
+            System.out.println("UNDRAWING");
+            for (Tile triangle : invalidTriangles) {
+                display.getChildren().removeAll(triangle.getRepresentation());
+            }
             triangulation.remove(invalidTriangles);
             delay++;
             newTriangles = triangulation.fill(cavity);
-            delayDrawTiles(newTriangles, delay);
+//            delayDrawTiles(newTriangles, delay);
+            System.out.println("Cavity: " + cavity);
+            System.out.println("New triangles: " + newTriangles);
+            System.out.println("DRAWING");
+            for (Tile triangle : newTriangles) {
+                System.out.println("Tile: " + triangle.getCircumcenter());
+                display.getChildren().addAll((triangle.getRepresentation()));
+            }
             delay++;
         }
         Vector<Tile> fakeTriangles = triangulation.getFakeTriangles();
-        delayUndrawTiles(fakeTriangles, delay);
+//        delayUndrawTiles(fakeTriangles, delay);
+        for (Tile triangle : fakeTriangles) {
+            display.getChildren().removeAll(triangle.getRepresentation());
+        }
     }
     private void delayDrawTiles(Vector<Tile> current, int delay) {
         Task<Void> sleeper = new Task<>() {

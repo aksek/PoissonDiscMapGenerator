@@ -1,6 +1,8 @@
 package org.example;
 
 import java.awt.*;
+
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 
 public class Tile {
@@ -32,6 +34,8 @@ public class Tile {
                 (double)A.getPoint().x, (double)A.getPoint().y,
                 (double)B.getPoint().x, (double)B.getPoint().y,
                 (double)C.getPoint().x, (double)C.getPoint().y);
+        representation.setStroke(Color.GRAY);
+        representation.setFill(Color.TRANSPARENT);
     }
     public boolean has(Node vertex) {
         return A == vertex || B == vertex || C == vertex;

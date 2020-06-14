@@ -36,7 +36,7 @@ public class GUI {
 //        menu.setBackground(new Background(new BackgroundFill(Color.LINEN, new CornerRadii(0), new Insets(0))));
 
         Text lblMinDist = new Text("Min distance: ");
-        Spinner<Integer> spnMinDist = new Spinner<>(1, 100, 50);
+        Spinner<Integer> spnMinDist = new Spinner<>(1, 200, 150);
 
         Text lblMaxSampleNr = new Text("Max sample number: ");
         Spinner<Integer> spnMaxSampleNr = new Spinner<>(1, 50, 10);

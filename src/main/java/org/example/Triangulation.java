@@ -69,14 +69,17 @@ public class Triangulation {
         return cavity;
     }
     public void remove(Vector<Tile> invalidTriangles) {
+        for (Node vertex : graph) {
+            vertex.disconnect(invalidTriangles);
+        }
         int indInvalidTriangles = 0;
         for (int indTriangles = 0; indTriangles < triangles.size() && indInvalidTriangles < invalidTriangles.size();) {
             if (triangles.get(indTriangles) == invalidTriangles.get(indInvalidTriangles)) {
+                System.out.println("Removing triangle " + invalidTriangles.get(indInvalidTriangles).getCircumcenter());
                 triangles.removeElement(indTriangles);
                 indInvalidTriangles++;
-            } else {
-                indTriangles++;
             }
+            indTriangles++;
         }
     }
     public Vector<Tile> fill(Vector<Node> cavity) {
@@ -86,7 +89,9 @@ public class Triangulation {
         for(int i = 0; i < cavity.size() - 1; i++) {
             A = cavity.get(i);
             B = cavity.get(i + 1);
-            this.add(new Tile(A, B, newVertex));
+            Tile newTile = new Tile(A, B, newVertex);
+            this.add(newTile);
+            newTiles.addElement(newTile);
         }
         return newTiles;
     }
