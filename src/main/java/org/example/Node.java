@@ -22,10 +22,11 @@ public class Node {
         for (int indInvalidTriangles = 0; indInvalidTriangles < invalidTriangles.size() && indPartOf < partOf.size(); ) {
             if (partOf.get(indPartOf) == invalidTriangles.get(indInvalidTriangles)) {
                 System.out.println("Disconnecting " + invalidTriangles.get(indInvalidTriangles).getCircumcenter() + " from " + this.vertex);
-                partOf.removeElement(indPartOf);
+                partOf.removeElementAt(indPartOf);
                 indInvalidTriangles++;
+            } else {
+                indPartOf++;
             }
-            indPartOf++;
         }
     }
 }

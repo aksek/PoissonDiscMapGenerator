@@ -1,14 +1,15 @@
 package org.example;
 
-import javafx.scene.shape.Polygon;
-
 import java.awt.*;
+import java.util.Comparator;
 import java.util.Vector;
 
 public class Triangulation {
     int W, H;
     Vector<Tile> triangles;
     Vector<Node> graph;
+    Point currentCavityCenter;
+
     public Triangulation(int width, int height) {
         W = width;
         H = height;
@@ -18,7 +19,6 @@ public class Triangulation {
     public Tile createSuperTriangle() {
         return new Tile(new Point(-W / 2 - 2, -2), new Point(W * 3 / 2 + 2, -2), new Point(W / 2 , 2 * H + 1));
     }
-
 
     public void add(Tile triangle) {
         triangles.addElement(triangle);
@@ -56,16 +56,31 @@ public class Triangulation {
         }
         return invalidTriangles;
     }
-    public Vector<Node> getCavityEdges(Vector<Tile> invalidTriangles) {
+    private int  angle(Point center, Point vertex) {
+        return (int)(360 / 2 / Math.PI * Math.atan2(vertex.y - center.y, vertex.x - center.x));
+    }
+    class compareByAngle implements Comparator<Node> {
+        public int compare(Node a, Node b) {
+            return angle(currentCavityCenter, a.getPoint()) - angle(currentCavityCenter, b.getPoint());
+        }
+    }
+    public Vector<Node> getCavityEdges(Vector<Tile> invalidTriangles, Point cavityCenter) {
         Vector<Node> cavity = new Vector<>();
         for (Tile triangle : invalidTriangles) {
-            if (cavity.isEmpty() || cavity.lastElement() != triangle.A())
+            if (!cavity.contains(triangle.A()))
                 cavity.addElement(triangle.A());
-            if (cavity.isEmpty() || cavity.lastElement() != triangle.B())
+            if (!cavity.contains(triangle.B()))
             cavity.addElement(triangle.B());
-            if (cavity.isEmpty() || cavity.lastElement() != triangle.C())
+            if (!cavity.contains(triangle.C()))
             cavity.addElement(triangle.C());
         }
+        currentCavityCenter = cavityCenter;
+        cavity.sort(new compareByAngle());
+        System.out.println("Cavity: ");
+        for (Node vertex : cavity) {
+            System.out.print(vertex.getPoint());
+        }
+        System.out.println();
         return cavity;
     }
     public void remove(Vector<Tile> invalidTriangles) {
@@ -73,29 +88,34 @@ public class Triangulation {
             vertex.disconnect(invalidTriangles);
         }
         int indInvalidTriangles = 0;
-        for (int indTriangles = 0; indTriangles < triangles.size() && indInvalidTriangles < invalidTriangles.size();) {
+        for (int indTriangles = 0; indTriangles < triangles.size() && indInvalidTriangles < invalidTriangles.size(); ) {
             if (triangles.get(indTriangles) == invalidTriangles.get(indInvalidTriangles)) {
                 System.out.println("Removing triangle " + invalidTriangles.get(indInvalidTriangles).getCircumcenter());
-                triangles.removeElement(indTriangles);
+                triangles.removeElementAt(indTriangles);
                 indInvalidTriangles++;
+            } else {
+                indTriangles++;
             }
-            indTriangles++;
         }
+        System.out.println("Nr of triangles after deletion: " + triangles.size());
     }
     public Vector<Tile> fill(Vector<Node> cavity) {
         Vector<Tile> newTiles = new Vector<>();
         Node newVertex = graph.lastElement();
-        Node A, B;
+        Node A = cavity.firstElement();
+        Node B = cavity.lastElement();
+        Tile newTile = new Tile(A, B, newVertex);
+        this.add(newTile);
+        newTiles.addElement(newTile);
         for(int i = 0; i < cavity.size() - 1; i++) {
             A = cavity.get(i);
             B = cavity.get(i + 1);
-            Tile newTile = new Tile(A, B, newVertex);
+            newTile = new Tile(A, B, newVertex);
             this.add(newTile);
             newTiles.addElement(newTile);
         }
         return newTiles;
     }
-//    TODO: the tiles are displayed with delay, when the data structures they are using have already been altered. Do something about it
     public Vector<Tile> getFakeTriangles() {
         Vector<Node> superTriangleNodes = new Vector<>();
         superTriangleNodes.addElement(graph.get(0));
@@ -105,7 +125,7 @@ public class Triangulation {
         for (Tile triangle : triangles) {
             for (Node vertex : superTriangleNodes) {
                 if (triangle.has(vertex)) {
-                    triangles.removeElement(triangle);
+//                    triangles.removeElement(triangle);
                     fakeTriangles.addElement(triangle);
                 }
             }

@@ -26,7 +26,7 @@ public class TriangulationTest {
         Vector<Point> vertices = new Vector<>();
         Triangulation tester = new Triangulation(50, 60);
         Tile t = new Tile(new Point(1, 1), new Point(50, 20), new Point(30, 60));
-        Point circumcenter = tester.getCircumcenter(t);
+        Point circumcenter = t.getCircumcenter();
         System.out.println("circumcenter: " + circumcenter.x + " " + circumcenter.y);
 
         Assertions.assertTrue((int)circumcenter.distance(t.A().getPoint()) - (int)circumcenter.distance(t.B().getPoint()) <= 1);

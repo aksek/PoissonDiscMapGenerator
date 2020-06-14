@@ -4,7 +4,6 @@ import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Polygon;
 
 import java.awt.*;
 import java.util.Vector;
@@ -30,31 +29,31 @@ public class TriangulationMain {
             System.out.println("Adding vertex: " + vertex.x + " " + vertex.y);
             triangulation.add(vertex);
             invalidTriangles = triangulation.getInvalidTriangles(vertex);
-            System.out.println("Invalid: " + invalidTriangles.firstElement().getCircumcenter());
-            cavity = triangulation.getCavityEdges(invalidTriangles);
-//            delayUndrawTiles(invalidTriangles, delay);
+            System.out.println("Invalid: " + invalidTriangles);
             System.out.println("UNDRAWING");
-            for (Tile triangle : invalidTriangles) {
-                display.getChildren().removeAll(triangle.getRepresentation());
-            }
+            delayUndrawTiles(invalidTriangles, delay);
+//            for (Tile triangle : invalidTriangles) {
+//                display.getChildren().removeAll(triangle.getRepresentation());
+//            }
             triangulation.remove(invalidTriangles);
             delay++;
+            cavity = triangulation.getCavityEdges(invalidTriangles, vertex);
             newTriangles = triangulation.fill(cavity);
-//            delayDrawTiles(newTriangles, delay);
             System.out.println("Cavity: " + cavity);
             System.out.println("New triangles: " + newTriangles);
             System.out.println("DRAWING");
-            for (Tile triangle : newTriangles) {
-                System.out.println("Tile: " + triangle.getCircumcenter());
-                display.getChildren().addAll((triangle.getRepresentation()));
-            }
+            delayDrawTiles(newTriangles, delay);
+//            for (Tile triangle : newTriangles) {
+//                System.out.println("Tile: " + triangle.getCircumcenter());
+//                display.getChildren().addAll((triangle.getRepresentation()));
+//            }
             delay++;
         }
         Vector<Tile> fakeTriangles = triangulation.getFakeTriangles();
-//        delayUndrawTiles(fakeTriangles, delay);
-        for (Tile triangle : fakeTriangles) {
-            display.getChildren().removeAll(triangle.getRepresentation());
-        }
+        delayUndrawTiles(fakeTriangles, delay);
+//        for (Tile triangle : fakeTriangles) {
+//            display.getChildren().removeAll(triangle.getRepresentation());
+//        }
     }
     private void delayDrawTiles(Vector<Tile> current, int delay) {
         Task<Void> sleeper = new Task<>() {
@@ -67,13 +66,10 @@ public class TriangulationMain {
                 return null;
             }
         };
-        sleeper.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-            @Override
-            public void handle(WorkerStateEvent event) {
-                System.out.println("adding edges");
-                for (Tile triangle : current) {
-                    display.getChildren().addAll(triangle.getRepresentation());
-                }
+        sleeper.setOnSucceeded(event -> {
+            System.out.println("adding edges");
+            for (Tile triangle : current) {
+                display.getChildren().addAll(triangle.getRepresentation());
             }
         });
         new Thread(sleeper).start();
@@ -89,12 +85,9 @@ public class TriangulationMain {
                 return null;
             }
         };
-        sleeper.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-            @Override
-            public void handle(WorkerStateEvent event) {
-                for (Tile triangle : current) {
-                    display.getChildren().removeAll(triangle.getRepresentation());
-                }
+        sleeper.setOnSucceeded(event -> {
+            for (Tile triangle : current) {
+                display.getChildren().removeAll(triangle.getRepresentation());
             }
         });
         new Thread(sleeper).start();
