@@ -22,7 +22,7 @@ public class TriangulationMain {
         runAlgorithm(delay);
     }
     private void runAlgorithm(int delay) {
-        triangulation.add(triangulation.createSuperTriangle());
+        triangulation.addSuperTriangle();
         Vector<Tile> invalidTriangles, newTriangles;
         Vector<Node> cavity;
         for (Point vertex : V) {

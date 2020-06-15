@@ -96,4 +96,7 @@ public class Tile {
     public Point getCircumcenter() {
         return circumcenter;
     }
+    boolean fake(int W, int H) {
+        return A.offBoundaries(W, H) || B.offBoundaries(W, H) || C.offBoundaries(W, H);
+    }
 }

@@ -16,8 +16,9 @@ public class Triangulation {
         triangles = new Vector<>();
         graph = new Vector<>();
     }
-    public Tile createSuperTriangle() {
-        return new Tile(new Point(-W / 2 - 2, -2), new Point(W * 3 / 2 + 2, -2), new Point(W / 2 , 2 * H + 1));
+    public void addSuperTriangle() {
+        add(new Tile(new Point(-1, H + 1), new Point(-1, -1), new Point(W + 10, -1)));
+        add(new Tile(new Point(-10, H + 1), new Point(W + 1, H + 1), new Point(W + 1, -1)));
     }
 
     public void add(Tile triangle) {
@@ -117,17 +118,10 @@ public class Triangulation {
         return newTiles;
     }
     public Vector<Tile> getFakeTriangles() {
-        Vector<Node> superTriangleNodes = new Vector<>();
-        superTriangleNodes.addElement(graph.get(0));
-        superTriangleNodes.addElement(graph.get(1));
-        superTriangleNodes.addElement(graph.get(2));
         Vector<Tile> fakeTriangles = new Vector<>();
         for (Tile triangle : triangles) {
-            for (Node vertex : superTriangleNodes) {
-                if (triangle.has(vertex)) {
-//                    triangles.removeElement(triangle);
-                    fakeTriangles.addElement(triangle);
-                }
+            if(triangle.fake(W, H)) {
+                fakeTriangles.addElement(triangle);
             }
         }
         return fakeTriangles;

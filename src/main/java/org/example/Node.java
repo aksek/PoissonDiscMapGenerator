@@ -29,4 +29,7 @@ public class Node {
             }
         }
     }
+    boolean offBoundaries(int W, int H) {
+        return vertex.x < 0 || vertex.x > W || vertex.y < 0 || vertex.y > H;
+    }
 }
