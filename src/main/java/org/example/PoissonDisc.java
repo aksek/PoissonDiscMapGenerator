@@ -28,7 +28,7 @@ public class PoissonDisc {
         grid = new Point[h][w];
     }
     public void deactivate(int index, Point vertex) {
-        activeSamples.remove(index);
+        activeSamples.removeElementAt(index);
         inactiveSamples.addElement(vertex);
     }
     public Point getVertexByIndex(int index) {
@@ -54,8 +54,8 @@ public class PoissonDisc {
     public Point getNextCandidate(Point current) {
         double a = 2 * Math.PI * ThreadLocalRandom.current().nextDouble(0, 1);
         int r = ThreadLocalRandom.current().nextInt(minR, 2 * minR);
-        int x = (int) current.x + (int)(r * Math.cos(a));
-        int y = (int) current.y + (int)(r * Math.sin(a));
+        int x = current.x + (int)Math.ceil(r * Math.cos(a));
+        int y = current.y + (int)Math.ceil(r * Math.sin(a));
         return new Point(x, y);
     }
     public boolean checkCandidate(Point candidate) {
@@ -84,5 +84,18 @@ public class PoissonDisc {
             }
         }
         return true;
+    }
+    public Vector<Point> getGeneratedVertices() {
+        return inactiveSamples;
+    }
+
+    public Vector<Point> remainingActiveSamples() {
+        Vector<Point> redVertices = new Vector<>();
+        for (Point vertex : activeSamples) {
+            activeSamples.removeElement(vertex);
+            inactiveSamples.addElement(vertex);
+            redVertices.addElement(vertex);
+        }
+        return redVertices;
     }
 }

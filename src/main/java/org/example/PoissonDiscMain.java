@@ -1,28 +1,29 @@
 package org.example;
 
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
-import javafx.event.EventHandler;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 import java.awt.*;
-
-import javafx.scene.paint.Color;
+import java.util.Vector;
 
 public class PoissonDiscMain {
     PoissonDisc poisson;
     Pane display;
     int speed;
     int k;
-    int vertices;
+    int maxVertices;
+    int W, H;
 
     PoissonDiscMain(int minimumR, int maxSampleNr, int maxVertexNumber, int simulationSpeed, int height, int width, Pane disp) {
         poisson = new PoissonDisc(minimumR, maxSampleNr, height, width);
         speed = simulationSpeed;
         display = disp;
         k = maxSampleNr;
-        vertices = maxVertexNumber;
+        maxVertices = maxVertexNumber;
+        W = width;
+        H = height;
         runAlgorithm();
     }
     private void runAlgorithm() {
@@ -31,12 +32,12 @@ public class PoissonDiscMain {
         delayDrawVertex(display, current, 0, true, speed);
         int vertexCounter = 1;
         int delay = 1;
-        while(!poisson.finished() && vertexCounter < vertices) {
+        while(!poisson.finished() && vertexCounter < maxVertices) {
             int currentIndex = poisson.getRandomActiveVertexIndex();
             current = poisson.getVertexByIndex(currentIndex);
             Point candidate;
             int i = 0;
-            boolean validCandidate = false;
+            boolean validCandidate;
             do {
                 candidate = poisson.getNextCandidate(current);
                 validCandidate = poisson.checkCandidate(candidate);
@@ -54,27 +55,49 @@ public class PoissonDiscMain {
             System.out.println("vertexCounter: " + vertexCounter);
             delay++;
         }
+//        Vector<Point> redVertices = poisson.remainingActiveSamples();
+//        deactivateRemainingActiveSamples(redVertices, delay);
+        delay++;
+        wakeTriangulation(delay);
     }
 
-    private void delayDrawVertex(Pane display, Point current, int delay, boolean active, int speed) {
-        Task<Void> sleeper = new Task<Void>() {
+    private void deactivateRemainingActiveSamples(Vector<Point> vertices, int delay) {
+        Task<Void> sleeper = new Task<>() {
             @Override
-            protected Void call() throws Exception {
+            protected Void call() {
                 try {
                     Thread.sleep(1000 / speed * delay);
-                } catch (InterruptedException e) {
+                } catch (InterruptedException ignored) {
                 }
                 return null;
             }
         };
-        sleeper.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+        sleeper.setOnSucceeded(event -> {
+            for (Point current : vertices) {
+                var vertex = new Circle(current.x, current.y, 2);
+                System.out.println("inactive vertex: " + vertex.getCenterX() + " " + vertex.getCenterY());
+                display.getChildren().addAll(vertex);
+            }
+        });
+        new Thread(sleeper).start();
+    }
+
+    private void delayDrawVertex(Pane display, Point current, int delay, boolean active, int speed) {
+        Task<Void> sleeper = new Task<>() {
             @Override
-            public void handle(WorkerStateEvent event) {
-                if (active) {
-                    addActiveVertex(display, current);
-                } else {
-                    addInactiveVertex(display, current);
+            protected Void call() {
+                try {
+                    Thread.sleep(1000 / speed * delay);
+                } catch (InterruptedException ignored) {
                 }
+                return null;
+            }
+        };
+        sleeper.setOnSucceeded(event -> {
+            if (active) {
+                addActiveVertex(display, current);
+            } else {
+                addInactiveVertex(display, current);
             }
         });
         new Thread(sleeper).start();
@@ -88,8 +111,23 @@ public class PoissonDiscMain {
     private void addInactiveVertex(Pane display, Point current) {
         var vertex = new Circle(current.x, current.y, 2);
         System.out.println("inactive vertex: " + vertex.getCenterX() + " " + vertex.getCenterY());
-        display.getChildren().removeAll(vertex);
         display.getChildren().addAll(vertex);
+    }
+    private void wakeTriangulation(int delay) {
+        Task<Void> sleeper = new Task<>() {
+            @Override
+            protected Void call() {
+                try {
+                    Thread.sleep(1000 / speed * delay);
+                } catch (InterruptedException ignored) {
+                }
+                return null;
+            }
+        };
+        sleeper.setOnSucceeded(event -> {
+            new TriangulationMain(poisson.getGeneratedVertices(), W, H, speed, display, delay);
+        });
+        new Thread(sleeper).start();
     }
 }
 
