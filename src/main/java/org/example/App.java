@@ -3,9 +3,6 @@ package org.example;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-/**
- * JavaFX MapGenerator.App
- */
 public class App extends Application {
 
     @Override

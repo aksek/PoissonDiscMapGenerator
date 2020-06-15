@@ -1,8 +1,6 @@
 package org.example;
 
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
-import javafx.event.EventHandler;
 import javafx.scene.layout.Pane;
 
 import java.awt.*;
@@ -27,33 +25,20 @@ public class TriangulationMain {
         Vector<Node> cavity;
         for (Point vertex : V) {
             System.out.println("Adding vertex: " + vertex.x + " " + vertex.y);
-            triangulation.add(vertex);
             invalidTriangles = triangulation.getInvalidTriangles(vertex);
-            System.out.println("Invalid: " + invalidTriangles);
-            System.out.println("UNDRAWING");
+            System.out.println("Invalid: " + invalidTriangles.size());
             delayUndrawTiles(invalidTriangles, delay);
-//            for (Tile triangle : invalidTriangles) {
-//                display.getChildren().removeAll(triangle.getRepresentation());
-//            }
             triangulation.remove(invalidTriangles);
             delay++;
             cavity = triangulation.getCavityEdges(invalidTriangles, vertex);
-            newTriangles = triangulation.fill(cavity);
-            System.out.println("Cavity: " + cavity);
-            System.out.println("New triangles: " + newTriangles);
-            System.out.println("DRAWING");
+            newTriangles = triangulation.fill(cavity, vertex);
+            System.out.println("Cavity: " + cavity.size());
+            System.out.println("New triangles: " + newTriangles.size());
             delayDrawTiles(newTriangles, delay);
-//            for (Tile triangle : newTriangles) {
-//                System.out.println("Tile: " + triangle.getCircumcenter());
-//                display.getChildren().addAll((triangle.getRepresentation()));
-//            }
             delay++;
         }
         Vector<Tile> fakeTriangles = triangulation.getFakeTriangles();
         delayUndrawTiles(fakeTriangles, delay);
-//        for (Tile triangle : fakeTriangles) {
-//            display.getChildren().removeAll(triangle.getRepresentation());
-//        }
         new Colouring(triangulation.getAllTriangles(), display, delay, speed);
     }
     private void delayDrawTiles(Vector<Tile> current, int delay) {
@@ -68,7 +53,6 @@ public class TriangulationMain {
             }
         };
         sleeper.setOnSucceeded(event -> {
-            System.out.println("adding edges");
             for (Tile triangle : current) {
                 display.getChildren().addAll(triangle.getRepresentation());
             }

@@ -33,10 +33,10 @@ public class GUI {
         ColumnConstraints column1 = new ColumnConstraints();
         column1.setPercentWidth(50);
         menu.getColumnConstraints().addAll(column0, column1);
-//        menu.setBackground(new Background(new BackgroundFill(Color.LINEN, new CornerRadii(0), new Insets(0))));
+
 
         Text lblMinDist = new Text("Min distance: ");
-        Spinner<Integer> spnMinDist = new Spinner<>(1, 200, 20);
+        Spinner<Integer> spnMinDist = new Spinner<>(15, 100, 30);
 
         Text lblMaxSampleNr = new Text("Max sample number: ");
         Spinner<Integer> spnMaxSampleNr = new Spinner<>(1, 50, 10);
@@ -93,8 +93,7 @@ public class GUI {
         GridPane root = new GridPane();
         root.setPadding(new Insets(10));
         root.setPrefSize(display.getPrefWidth() + menu.getPrefWidth(), display.getPrefHeight());
-//        ColumnConstraints column0 = new ColumnConstraints(display.getPrefWidth(), display.getPrefHeight(), Double.MAX_VALUE);
-//        column0.setHgrow(Priority.ALWAYS);
+
         GridPane.setFillHeight(display, Boolean.TRUE);
         GridPane.setFillWidth(display, Boolean.TRUE);
 

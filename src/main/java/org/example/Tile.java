@@ -37,9 +37,7 @@ public class Tile {
         representation.setStroke(Color.GRAY);
         representation.setFill(Color.TRANSPARENT);
     }
-    public boolean has(Node vertex) {
-        return A == vertex || B == vertex || C == vertex;
-    }
+
     public int Xa() { return A.getPoint().x; }
     public int Ya() { return A.getPoint().y; }
     public int Xb() { return B.getPoint().x; }
@@ -53,19 +51,6 @@ public class Tile {
 
     public Polygon getRepresentation() {
         return representation;
-    }
-    public boolean contains(Point vertex) {
-        boolean underAB = onSameSideOfLine(vertex, C.getPoint(), A.getPoint(), B.getPoint());
-        boolean underBC = onSameSideOfLine(vertex, A.getPoint(), B.getPoint(), C.getPoint());
-        boolean underCA = onSameSideOfLine(vertex, B.getPoint(), C.getPoint(), A.getPoint());
-        return underAB && underBC && underCA;
-    }
-
-    boolean onSameSideOfLine(Point p1, Point p2, Point lineThrough1, Point lineThrough2) {
-        double a = (double)(lineThrough2.y - lineThrough1.y)/(lineThrough2.x - lineThrough1.x);
-        double b = lineThrough1.y - a * lineThrough1.x;
-        return (p1.y <= a * p1.x + b) && (p2.y <= a * p2.x + b) ||
-                (p1.y >= a * p1.x + b) && (p2.y >= a * p2.x + b);
     }
 
     public boolean circumcircleContains(Point vertex) {
@@ -87,8 +72,7 @@ public class Tile {
         return new Point(Ux, Uy);
     }
     public int getRadius() {
-        Point circumcenter = this.getCircumcenter();
-        return this.getRadius(circumcenter);
+        return this.getRadius(this.getCircumcenter());
     }
     public int getRadius(Point circumcenter) {
         return (int)circumcenter.distance(this.A().getPoint());

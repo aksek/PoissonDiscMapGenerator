@@ -31,15 +31,15 @@ public class Colouring {
                 return null;
             }
         };
-        sleeper.setOnSucceeded(event -> run(tiles, display));
+        sleeper.setOnSucceeded(event -> run(tiles));
         new Thread(sleeper).start();
     }
-    private void run(Vector<Tile> tiles, Pane display) {
+    private void run(Vector<Tile> tiles) {
         Random rand = new Random();
         int color = altitudes.size() - 1;
         for(Tile tile : tiles) {
             tile.getRepresentation().setFill(altitudes.get(color));
-            color = Math.max(0, color - (rand.nextInt(100) >= 90 + 10*Math.atan((double)tiles.size() / 600) ? 1 : 0));
+            color = Math.max(0, color - (rand.nextInt(100) >= 90 + 10*Math.atan((double)tiles.size() / 800) ? 1 : 0));
         }
     }
 }

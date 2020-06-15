@@ -55,31 +55,7 @@ public class PoissonDiscMain {
             System.out.println("vertexCounter: " + vertexCounter);
             delay++;
         }
-//        Vector<Point> redVertices = poisson.remainingActiveSamples();
-//        deactivateRemainingActiveSamples(redVertices, delay);
-        delay++;
-        wakeTriangulation(delay);
-    }
-
-    private void deactivateRemainingActiveSamples(Vector<Point> vertices, int delay) {
-        Task<Void> sleeper = new Task<>() {
-            @Override
-            protected Void call() {
-                try {
-                    Thread.sleep(1000 / speed * delay);
-                } catch (InterruptedException ignored) {
-                }
-                return null;
-            }
-        };
-        sleeper.setOnSucceeded(event -> {
-            for (Point current : vertices) {
-                var vertex = new Circle(current.x, current.y, 2);
-                System.out.println("inactive vertex: " + vertex.getCenterX() + " " + vertex.getCenterY());
-                display.getChildren().addAll(vertex);
-            }
-        });
-        new Thread(sleeper).start();
+        deactivateRemainingActiveSamples(delay);
     }
 
     private void delayDrawVertex(Pane display, Point current, int delay, boolean active, int speed) {
@@ -105,7 +81,6 @@ public class PoissonDiscMain {
     private void addActiveVertex(Pane display, Point current) {
         var vertex = new Circle(current.x, current.y, 2);
         vertex.setFill(Color.RED);
-//        System.out.println("active vertex: " + vertex.getCenterX() + " " + vertex.getCenterY());
         display.getChildren().addAll(vertex);
     }
     private void addInactiveVertex(Pane display, Point current) {
@@ -113,12 +88,34 @@ public class PoissonDiscMain {
         System.out.println("inactive vertex: " + vertex.getCenterX() + " " + vertex.getCenterY());
         display.getChildren().addAll(vertex);
     }
-    private void wakeTriangulation(int delay) {
+    private void deactivateRemainingActiveSamples(int delay) {
         Task<Void> sleeper = new Task<>() {
             @Override
             protected Void call() {
                 try {
                     Thread.sleep(1000 / speed * delay);
+                } catch (InterruptedException ignored) {
+                }
+                return null;
+            }
+        };
+        sleeper.setOnSucceeded(event -> {
+            Vector<Point> vertices = poisson.remainingActiveSamples();
+            for (Point current : vertices) {
+                var vertex = new Circle(current.x, current.y, 2);
+                System.out.println("inactive vertex: " + vertex.getCenterX() + " " + vertex.getCenterY());
+                display.getChildren().addAll(vertex);
+            }
+            wakeTriangulation();
+        });
+        new Thread(sleeper).start();
+    }
+    private void wakeTriangulation() {
+        Task<Void> sleeper = new Task<>() {
+            @Override
+            protected Void call() {
+                try {
+                    Thread.sleep(1000 / speed);
                 } catch (InterruptedException ignored) {
                 }
                 return null;
