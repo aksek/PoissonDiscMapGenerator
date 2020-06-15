@@ -55,13 +55,10 @@ public class PoissonDiscMain {
             System.out.println("vertexCounter: " + vertexCounter);
             delay++;
         }
-//        Vector<Point> redVertices = poisson.remainingActiveSamples();
-//        deactivateRemainingActiveSamples(redVertices, delay);
-        delay++;
-        wakeTriangulation(delay);
+        deactivateRemainingActiveSamples(delay);
     }
 
-    private void deactivateRemainingActiveSamples(Vector<Point> vertices, int delay) {
+    private void deactivateRemainingActiveSamples(int delay) {
         Task<Void> sleeper = new Task<>() {
             @Override
             protected Void call() {
@@ -73,11 +70,13 @@ public class PoissonDiscMain {
             }
         };
         sleeper.setOnSucceeded(event -> {
+            Vector<Point> vertices = poisson.remainingActiveSamples();
             for (Point current : vertices) {
                 var vertex = new Circle(current.x, current.y, 2);
                 System.out.println("inactive vertex: " + vertex.getCenterX() + " " + vertex.getCenterY());
                 display.getChildren().addAll(vertex);
             }
+            wakeTriangulation(1);
         });
         new Thread(sleeper).start();
     }

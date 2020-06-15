@@ -92,7 +92,6 @@ public class PoissonDisc {
     public Vector<Point> remainingActiveSamples() {
         Vector<Point> redVertices = new Vector<>();
         for (Point vertex : activeSamples) {
-            activeSamples.removeElement(vertex);
             inactiveSamples.addElement(vertex);
             redVertices.addElement(vertex);
         }
