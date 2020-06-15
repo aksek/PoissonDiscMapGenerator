@@ -41,8 +41,8 @@ public class PoissonDisc {
         return activeSamples.isEmpty();
     }
     public Point getFirstVertex() {
-        int x = ThreadLocalRandom.current().nextInt(0, w + 1);
-        int y = ThreadLocalRandom.current().nextInt(0, h + 1);
+        int x = ThreadLocalRandom.current().nextInt(1, w);
+        int y = ThreadLocalRandom.current().nextInt(1, h);
         return new Point(x, y);
     }
 
@@ -59,7 +59,7 @@ public class PoissonDisc {
         return new Point(x, y);
     }
     public boolean checkCandidate(Point candidate) {
-        if (0 > candidate.x || candidate.x >= w || 0 > candidate.y || candidate.y >= h)
+        if (2 > candidate.x || candidate.x > w - 2 || 2 > candidate.y || candidate.y > h - 2)
             return false;
         int cellX = candidate.x / cellSize;
         int cellY = candidate.y / cellSize;
@@ -67,9 +67,6 @@ public class PoissonDisc {
         int maxCellX = Math.min(cellX + 3, gridW);
         int minCellY = Math.max(cellY - 2, 0);
         int maxCellY = Math.min(cellY + 3, gridH);
-
-        System.out.println("Candidate: " + candidate.x + ' ' + candidate.y);
-        System.out.println("X: " + minCellX * cellSize + "Y: " + minCellY * cellSize);
 
         int distance;
         for (int i = minCellX; i < maxCellX; i++) {

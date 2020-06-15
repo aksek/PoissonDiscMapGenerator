@@ -17,8 +17,12 @@ public class Triangulation {
         graph = new Vector<>();
     }
     public void addSuperTriangle() {
-        add(new Tile(new Point(-1, H + 1), new Point(-1, -1), new Point(W + 10, -1)));
-        add(new Tile(new Point(-10, H + 1), new Point(W + 1, H + 1), new Point(W + 1, -1)));
+        Node A = new Node(new Point(-1,1));
+        Node B = new Node(new Point(-1, H + 1));
+        Node C = new Node(new Point(W + 1, -1));
+        Node D = new Node(new Point(W + 1, H + 1));
+        add(new Tile(A, B, C));
+        add(new Tile(B, C, D));
     }
 
     public void add(Tile triangle) {
@@ -26,35 +30,12 @@ public class Triangulation {
         if (!graph.contains(triangle.A())) {
             graph.addElement(triangle.A());
         }
-        if (!graph.contains(triangle.A())) {
-            graph.addElement(triangle.A());
+        if (!graph.contains(triangle.B())) {
+            graph.addElement(triangle.B());
         }
-        if (!graph.contains(triangle.A())) {
-            graph.addElement(triangle.A());
+        if (!graph.contains(triangle.C())) {
+            graph.addElement(triangle.C());
         }
-//        int indA = graph.indexOf(triangle.A());
-//        if (indA == -1) {
-//            graph.addElement(triangle.A());
-//            indA = graph.size() - 1;
-//        }
-//        int indB = graph.indexOf(triangle.B());
-//        if (indB == -1) {
-//            graph.addElement(triangle.B());
-//            indB = graph.size() - 1;
-//        }
-//        int indC = graph.indexOf(triangle.C());
-//        if (indC == -1) {
-//            graph.addElement(triangle.C());
-//            indC = graph.size() - 1;
-//        }
-
-//        graph.get(indA).include(triangle);
-//        graph.get(indB).include(triangle);
-//        graph.get(indC).include(triangle);
-    }
-
-    public void add(Point vertex) {
-        graph.addElement(new Node(vertex));
     }
 
     public Vector<Tile> getInvalidTriangles(Point vertex) {
@@ -67,7 +48,7 @@ public class Triangulation {
         return invalidTriangles;
     }
     private int  angle(Point center, Point vertex) {
-        return (int)(360 / 2 / Math.PI * Math.atan2(vertex.y - center.y, vertex.x - center.x));
+        return (int)(23040 * Math.atan2(vertex.y - center.y, vertex.x - center.x));
     }
     class compareByAngle implements Comparator<Node> {
         public int compare(Node a, Node b) {
@@ -86,32 +67,23 @@ public class Triangulation {
         }
         currentCavityCenter = cavityCenter;
         cavity.sort(new compareByAngle());
-        System.out.println("Cavity: ");
-        for (Node vertex : cavity) {
-            System.out.print(vertex.getPoint());
-        }
-        System.out.println();
         return cavity;
     }
     public void remove(Vector<Tile> invalidTriangles) {
-//        for (Node vertex : graph) {
-//            vertex.disconnect(invalidTriangles);
-//        }
         int indInvalidTriangles = 0;
         for (int indTriangles = 0; indTriangles < triangles.size() && indInvalidTriangles < invalidTriangles.size(); ) {
             if (triangles.get(indTriangles) == invalidTriangles.get(indInvalidTriangles)) {
-                System.out.println("Removing triangle " + invalidTriangles.get(indInvalidTriangles).getCircumcenter());
                 triangles.removeElementAt(indTriangles);
                 indInvalidTriangles++;
             } else {
                 indTriangles++;
             }
         }
-        System.out.println("Nr of triangles after deletion: " + triangles.size());
     }
-    public Vector<Tile> fill(Vector<Node> cavity) {
+    public Vector<Tile> fill(Vector<Node> cavity, Point vertex) {
         Vector<Tile> newTiles = new Vector<>();
-        Node newVertex = graph.lastElement();
+        Node newVertex = new Node(vertex);
+        graph.addElement(newVertex);
         Node A = cavity.firstElement();
         Node B = cavity.lastElement();
         Tile newTile = new Tile(A, B, newVertex);
