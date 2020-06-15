@@ -6,6 +6,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 import java.awt.*;
+import java.util.Vector;
 
 public class PoissonDiscMain {
     PoissonDisc poisson;
@@ -54,7 +55,31 @@ public class PoissonDiscMain {
             System.out.println("vertexCounter: " + vertexCounter);
             delay++;
         }
+//        Vector<Point> redVertices = poisson.remainingActiveSamples();
+//        deactivateRemainingActiveSamples(redVertices, delay);
+        delay++;
         wakeTriangulation(delay);
+    }
+
+    private void deactivateRemainingActiveSamples(Vector<Point> vertices, int delay) {
+        Task<Void> sleeper = new Task<>() {
+            @Override
+            protected Void call() {
+                try {
+                    Thread.sleep(1000 / speed * delay);
+                } catch (InterruptedException ignored) {
+                }
+                return null;
+            }
+        };
+        sleeper.setOnSucceeded(event -> {
+            for (Point current : vertices) {
+                var vertex = new Circle(current.x, current.y, 2);
+                System.out.println("inactive vertex: " + vertex.getCenterX() + " " + vertex.getCenterY());
+                display.getChildren().addAll(vertex);
+            }
+        });
+        new Thread(sleeper).start();
     }
 
     private void delayDrawVertex(Pane display, Point current, int delay, boolean active, int speed) {

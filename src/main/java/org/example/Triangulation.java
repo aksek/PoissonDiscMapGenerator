@@ -39,9 +39,9 @@ public class Triangulation {
             indC = graph.size() - 1;
         }
 
-        graph.get(indA).include(triangle);
-        graph.get(indB).include(triangle);
-        graph.get(indC).include(triangle);
+//        graph.get(indA).include(triangle);
+//        graph.get(indB).include(triangle);
+//        graph.get(indC).include(triangle);
     }
 
     public void add(Point vertex) {
@@ -85,9 +85,9 @@ public class Triangulation {
         return cavity;
     }
     public void remove(Vector<Tile> invalidTriangles) {
-        for (Node vertex : graph) {
-            vertex.disconnect(invalidTriangles);
-        }
+//        for (Node vertex : graph) {
+//            vertex.disconnect(invalidTriangles);
+//        }
         int indInvalidTriangles = 0;
         for (int indTriangles = 0; indTriangles < triangles.size() && indInvalidTriangles < invalidTriangles.size(); ) {
             if (triangles.get(indTriangles) == invalidTriangles.get(indInvalidTriangles)) {
