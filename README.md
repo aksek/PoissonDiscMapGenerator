@@ -15,7 +15,7 @@ Użytkownik może wybrać:
  
  Czasem, przy małych minimalnych odległościach między wierzchołkami, program nie wykonuje się poprawnie. Jest to najprawdopodobniej kwestia dokładności komparatora, używanego przy wybieraniu kolejnych wierzchołków, na których narysowany będzie trójkąt. Nie udało mi się całkowicie wyeliminować tego problemu, ale możliwie zmniejszyłam prawodopodobieństwo jego wystąpienia.
   
-  * algorytm Bridsona generuje kolejne wierzchołki przy użyciu tych, które już istnieją. Maksymalna liczba próbek określa to, ile razy przeprowadzana jest próba znalezienia nowego wierzchołka, który spełnia warunki algorytmu, zanim wierzchołek generujący zostanie uznany za nieaktywny. Po zwiększeniu tego parametru, generowana siatka powinna być gęstsza i bardziej regularna
+  \* algorytm Bridsona generuje kolejne wierzchołki przy użyciu tych, które już istnieją. Maksymalna liczba próbek określa to, ile razy przeprowadzana jest próba znalezienia nowego wierzchołka, który spełnia warunki algorytmu, zanim wierzchołek generujący zostanie uznany za nieaktywny. Po zwiększeniu tego parametru, generowana siatka powinna być gęstsza i bardziej regularna
 
 ## Installation
 
