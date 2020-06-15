@@ -54,6 +54,7 @@ public class TriangulationMain {
 //        for (Tile triangle : fakeTriangles) {
 //            display.getChildren().removeAll(triangle.getRepresentation());
 //        }
+        new Colouring(triangulation.getAllTriangles(), display, delay, speed);
     }
     private void delayDrawTiles(Vector<Tile> current, int delay) {
         Task<Void> sleeper = new Task<>() {

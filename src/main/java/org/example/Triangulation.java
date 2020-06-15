@@ -23,21 +23,30 @@ public class Triangulation {
 
     public void add(Tile triangle) {
         triangles.addElement(triangle);
-        int indA = graph.indexOf(triangle.A());
-        if (indA == -1) {
+        if (!graph.contains(triangle.A())) {
             graph.addElement(triangle.A());
-            indA = graph.size() - 1;
         }
-        int indB = graph.indexOf(triangle.B());
-        if (indB == -1) {
-            graph.addElement(triangle.B());
-            indB = graph.size() - 1;
+        if (!graph.contains(triangle.A())) {
+            graph.addElement(triangle.A());
         }
-        int indC = graph.indexOf(triangle.C());
-        if (indC == -1) {
-            graph.addElement(triangle.C());
-            indC = graph.size() - 1;
+        if (!graph.contains(triangle.A())) {
+            graph.addElement(triangle.A());
         }
+//        int indA = graph.indexOf(triangle.A());
+//        if (indA == -1) {
+//            graph.addElement(triangle.A());
+//            indA = graph.size() - 1;
+//        }
+//        int indB = graph.indexOf(triangle.B());
+//        if (indB == -1) {
+//            graph.addElement(triangle.B());
+//            indB = graph.size() - 1;
+//        }
+//        int indC = graph.indexOf(triangle.C());
+//        if (indC == -1) {
+//            graph.addElement(triangle.C());
+//            indC = graph.size() - 1;
+//        }
 
 //        graph.get(indA).include(triangle);
 //        graph.get(indB).include(triangle);
@@ -125,5 +134,8 @@ public class Triangulation {
             }
         }
         return fakeTriangles;
+    }
+    public Vector<Tile> getAllTriangles() {
+        return triangles;
     }
 }

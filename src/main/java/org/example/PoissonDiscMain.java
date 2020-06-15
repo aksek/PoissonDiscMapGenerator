@@ -124,9 +124,7 @@ public class PoissonDiscMain {
                 return null;
             }
         };
-        sleeper.setOnSucceeded(event -> {
-            new TriangulationMain(poisson.getGeneratedVertices(), W, H, speed, display, delay);
-        });
+        sleeper.setOnSucceeded(event -> new TriangulationMain(poisson.getGeneratedVertices(), W, H, speed, display, 0));
         new Thread(sleeper).start();
     }
 }
